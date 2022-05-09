@@ -28,7 +28,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-if [ $SCAN_TYPE = "VS" ] then
+if [ $SCAN_TYPE = "VS" ] 
+then
     ASSETS = ACTION_PATH/$SCAN_TYPE
     $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
 fi
