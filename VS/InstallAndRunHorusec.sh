@@ -1,19 +1,33 @@
+#!/bin/bash
+
+# Install, Run and Sumarise Horusec reporting
+#
+# $1 --> Full path inside github worker to the folder where this script resides
+# $2 --> Horusec config file path inside the scanned repository
+# $3 --> Aditional horusec command line arguments
+
 # Directory configuration
 dir="Reports/VulnerabilityScan"
 assets="$1"
 
-echo assets
-
-# Install and run horusec
+# Install horusec
 curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
-horusec start -p="./" -e="true" -o="json" -O="./full_report.json" --config-file-path $2 $3
-ret=$?
+
+# Run horusec
+if [ $2 != "" ] 
+then
+    horusec start -p="./" -e="true" -o="json" -O="./full_report.json" --config-file-path $2 $3
+    ret=$?
+else
+    horusec start -p="./" -e="true" -o="json" -O="./full_report.json" $3
+    ret=$?
+fi
 
 # Sumarise reports
 mkdir -p $dir
-ls
 python3 -m pip install Jinja2
 python3 $assets/HorusecReporting.py ./full_report.json $assets > $dir/HorusecReport.html
 mv ./full_report.json $dir
 
+# Return with the exit code related to how the horusec run went
 exit $ret

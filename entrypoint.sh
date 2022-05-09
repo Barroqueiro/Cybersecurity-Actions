@@ -22,9 +22,12 @@ function usage() {
 # parse params
 while [[ "$#" > 0 ]]; do case $1 in
   --action-path) ACTION_PATH="$2"; shift;shift;;
+  --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
   --horusec-filepath) HORUSEC_FILEPATH="$2"; shift;shift;;
   --horusec-cmd) HORUSEC_CMD="$2"; shift;shift;;
+  --gitleaks-cmd) GITLEAKS_CMD="$2"; shift;shift;;
+  --secrets-filepath) SECRETS_FILEPATH="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
@@ -32,4 +35,10 @@ if [ $SCAN_TYPE = "VS" ]
 then
     ASSETS=$ACTION_PATH/$SCAN_TYPE
     $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
+fi
+
+if [ $SCAN_TYPE = "SS" ] 
+then
+    ASSETS=$ACTION_PATH/$SCAN_TYPE
+    $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME $GITLEAKS_CMD $SECRETS_FILEPATH
 fi

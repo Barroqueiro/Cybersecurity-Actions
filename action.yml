@@ -3,13 +3,19 @@ author: 'Dinis Cruz'
 description: 'Run a type of reporting on your repository'
 inputs:
   scan-type:
-    descripton: 'Type of scan to run [ Container Scan (cs), Bad Practices (bp), Vulnerability Scan (vs), Secret Scan (ss) ]'
+    descripton: 'Type of scan to run [ Container Scan (CS), Bad Practices (BP), Vulnerability Scan (VS), Secret Scan (SS) ]'
     required: true
   horusec-filepath:
     description: 'Path within the scanned repository whe the horusec config file is'
     deafult: ''
   horusec-cmd:
     description: 'Aditional command line arguments to be passed to horusec'
+    deafult: ''
+  gitleaks-cmd:
+    description: 'Additional command line arguments to be passed to gitleaks'
+    default: ''
+  secrets-filepath:
+    description: 'Hash of secrets to ignore during gitleaks run'
     deafult: ''
 runs:
   using: "composite"
@@ -18,9 +24,12 @@ runs:
       run: >
             ${{ github.action_path }}/entrypoint.sh 
             --action-path ${{ github.action_path }} 
+            --repo-name ${{ github.event.repository.name }}
             --scan-type ${{ inputs.scan-type}}
             --horusec-filepath ${{ inputs.horusec-filepath }}
             --horusec-cmd ${{ inputs.horusec-cmd }}
+            --gitleaks-cmd ${{ inputs.gitleaks-cmd }}
+            --secrets-filepath ${{ inputs.secrets-filepath }}
       shell: bash
     - name: Upload artifact
       if: always()
