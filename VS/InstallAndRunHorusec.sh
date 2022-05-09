@@ -11,6 +11,7 @@ ret=$?
 
 # Sumarise reports
 mkdir -p $dir
+ls
 python3 -m pip install Jinja2
 python3 $assets/HorusecReporting.py ./full_report.json $assets > $dir/HorusecReport.html
 mv ./full_report.json $dir

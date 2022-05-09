@@ -30,6 +30,6 @@ esac; done
 
 if [ $SCAN_TYPE = "VS" ] 
 then
-    ASSETS = ACTION_PATH/$SCAN_TYPE
+    ASSETS=ACTION_PATH/$SCAN_TYPE
     $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
 fi
