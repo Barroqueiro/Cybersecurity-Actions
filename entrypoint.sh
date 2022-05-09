@@ -31,7 +31,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-IFS=',' read -ra scan_type <<< "$1"
+IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
+
 for st in "${scan_type[@]}"; do
     if [ $st = "VS" ] 
     then
