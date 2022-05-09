@@ -36,13 +36,13 @@ IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 for st in "${scan_type[@]}"; do
     if [ $st = "VS" ] 
     then
-        ASSETS=$ACTION_PATH/$SCAN_TYPE
+        ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
     fi
 
     if [ $st = "SS" ] 
     then
-        ASSETS=$ACTION_PATH/$SCAN_TYPE
+        ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME $GITLEAKS_CMD $SECRETS_FILEPATH
     fi
 done
