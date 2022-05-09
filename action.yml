@@ -1,0 +1,30 @@
+name: 'Cybersecurity Actions'
+author: 'Dinis Cruz'
+description: 'Run a type of reporting on your repository'
+inputs:
+  scan-type:
+    descripton: 'Type of scan to run [ Container Scan (cs), Bad Practices (bp), Vulnerability Scan (vs), Secret Scan (ss) ]'
+    required: true
+  horusec-filepath:
+    description: 'Path within the scanned repository whe the horusec config file is'
+    deafult: ''
+  horusec-cmd:
+    description: 'Aditional command line arguments to be passed to horusec'
+    deafult: ''
+runs:
+  using: "composite"
+  steps:
+    - name: Running Horusec Security
+      run: >
+            ${{ github.action_path }}/entrypoint.sh 
+            --action-path ${{ github.action_path }} 
+            --scan-type ${{ inputs.scan-type}}
+            --horusec-filepath ${{ inputs.horusec-filepath }}
+            --horusec-cmd ${{ inputs.horusec-cmd }}
+      shell: bash
+    - name: Upload artifact
+      if: always()
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: Reports
+        path: Reports/

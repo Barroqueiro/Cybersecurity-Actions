@@ -1,0 +1,10 @@
+{
+  "horusecCliFalsePositiveHashes": [
+  ],
+  "horusecCliFilesOrPathsToIgnore": [
+  ],
+  "horusecCliReturnErrorIfFoundVulnerability": true,
+  "horusecCliRiskAcceptHashes": [],
+  "horusecCliSeveritiesToIgnore": []
+
+}
