@@ -10,6 +10,7 @@
 # Directory configuration
 dir="Reports/SecretScan"
 assets="$1"
+mkdir -p $dir
 
 # Get outside the repository 
 cd ..
@@ -28,7 +29,7 @@ cd ../$2
 # Run Gitleaks
 if [ $4 != "" ] 
 then
-    python3 $assets/SecretsReporting.py output.json $4 > SecretsReport.html
+    python3 $assets/SecretsReporting.py output.json $4 $1> SecretsReport.html
 else
     touch .ignoresecrets
     python3 $assets/SecretsReporting.py output.json .ignoresecrets $1 > $dir/SecretsReport.html
