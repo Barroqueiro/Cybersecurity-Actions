@@ -114,7 +114,7 @@ for st in "${scan_type[@]}"; do
             $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH "$DOCKLE_CMD" "$IMAGE_TAG"
             if [ $? = 1 ]
             then
-                if [ $SS_ISBLOCKING = "true" ]
+                if [ $DS_ISBLOCKING = "true" ]
                 then
                     echo "::error::Dockle Scan found problems, check the artifacts for more information"
                     ret=1
