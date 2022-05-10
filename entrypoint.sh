@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
