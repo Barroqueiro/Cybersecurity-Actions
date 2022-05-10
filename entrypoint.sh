@@ -108,6 +108,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "DS" ] 
     then
         if [ $BUILD_SCRIPT != "" ] || [ $IMAGE_TAG != "" ]
+        then
             ./$BUILD_SCRIPT
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH "$DOCKLE_CMD" "$IMAGE_TAG"
