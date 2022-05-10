@@ -27,6 +27,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
+  --build-script) BUILD_SCRIPT="$2"; shift;shift;;
+  --image-tag) IMAGE_TAG="$2"; shift;shift;;
   --prosp-filepath) PROSP_FILEPATH="$2"; shift;shift;;
   --prosp-cmd) PROSP_CMD="$2"; shift;shift;;
   --radon-cmd) RADON_CMD="$2"; shift;shift;;
@@ -35,9 +37,12 @@ while [[ "$#" > 0 ]]; do case $1 in
   --horusec-filepath) HORUSEC_FILEPATH="$2"; shift;shift;;
   --horusec-cmd) HORUSEC_CMD="$2"; shift;shift;;
   --vs-isblocking) VS_ISBLOCKING="$2"; shift;shift;;
-  --gitleaks-cmd) GITLEAKS_CMD="$2"; shift;shift;;
   --secrets-filepath) SECRETS_FILEPATH="$2"; shift;shift;;
+  --gitleaks-cmd) GITLEAKS_CMD="$2"; shift;shift;;
   --ss-isblocking) SS_ISBLOCKING="$2"; shift;shift;;
+  --dockle-filepath) DOCKLE_FILEPATH="$2"; shift;shift;;
+  --dockle-cmd) DOCKLE_CMD="$2"; shift;shift;;
+  --ds-isblocking) DS_ISBLOCKING="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
@@ -97,6 +102,24 @@ for st in "${scan_type[@]}"; do
             fi
         else
             echo "::notice::Secrets Scan did not find any problems"
+        fi
+    fi
+
+    if [ $st = "DS" ] 
+    then
+        ASSETS=$ACTION_PATH/$st
+        $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH $DOCKLE_CMD
+        if [ $? = 1 ]
+        then
+            if [ $SS_ISBLOCKING = "true" ]
+            then
+                echo "::error::Dockle Scan found problems, check the artifacts for more information"
+                ret=1
+            else
+                echo "::notice::Dockle Scan found problems but non blocking was active during this run"
+            fi
+        else
+            echo "::notice::Dockle Scan did not find any problems"
         fi
     fi
 done

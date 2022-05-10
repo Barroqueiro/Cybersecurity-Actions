@@ -5,8 +5,14 @@ inputs:
   scan-type:
     descripton: 'Type of scan to run [ Container Scan (CS), Bad Practices (BP), Vulnerability Scan (VS), Secret Scan (SS) ]'
     required: true
+  build-script: 
+    description: 'Script used to build the image'
+    default: ''
+  image-tag:
+    description: 'Tag by which we can identify the image'
+    default: ''
   prosp-filepath:
-    description: 'Path within the scanned repository whe the prospector profile file is'
+    description: 'Path within the scanned repository where the prospector profile file is'
     default: ''
   prosp-cmd:
     description: 'Aditional command line arguments to be passed to prospector'
@@ -21,7 +27,7 @@ inputs:
     description: 'Fail the workflow if the Bad Practices Scan finds any problems'
     default: 'true'
   horusec-filepath:
-    description: 'Path within the scanned repository whe the horusec config file is'
+    description: 'Path within the scanned repository where the horusec config file is'
     default: ''
   horusec-cmd:
     description: 'Aditional command line arguments to be passed to horusec'
@@ -33,10 +39,19 @@ inputs:
     description: 'Additional command line arguments to be passed to gitleaks'
     default: ''
   secrets-filepath:
-    description: 'Hash of secrets to ignore during gitleaks run'
+    description: 'File containing the hashes of secrets to ignore during gitleaks run'
     default: ''
   ss-isblocking:
     description: 'Fail the workflow if the Secrets Scan finds secrets not accepted'
+    default: 'true'
+  dockle-filepath:
+    description: 'Path within the scanned repository where the dockle ignore file is'
+    default: ''
+  dockle-cmd:
+    description: 'Aditional command line arguments to be passed to dockle'
+    default: ''
+  ds-isblocking:
+    description: 'Fail the workflow if the Dockle Scan finds vulnerabilities'
     default: 'true'
 runs:
   using: "composite"
@@ -44,9 +59,11 @@ runs:
     - name: Entrypoint
       run: >
             ${{ github.action_path }}/entrypoint.sh 
-            --action-path ${{ github.action_path }} 
+            --action-path ${{ github.action_path }}
             --repo-name ${{ github.event.repository.name }}
             --scan-type ${{ inputs.scan-type }}
+            --build-script ${{ github.build-script }}
+            --image-tag ${{ github.image-tag }}
             --prosp-filepath ${{ inputs.prosp-filepath }}
             --prosp-cmd ${{ inputs.prosp-cmd }}
             --radon-cmd ${{ inputs.radon-cmd }}
@@ -55,9 +72,12 @@ runs:
             --horusec-filepath ${{ inputs.horusec-filepath }}
             --horusec-cmd ${{ inputs.horusec-cmd }}
             --vs-isblocking ${{ inputs.vs-isblocking }}
-            --gitleaks-cmd ${{ inputs.gitleaks-cmd }}
             --secrets-filepath ${{ inputs.secrets-filepath }}
+            --gitleaks-cmd ${{ inputs.gitleaks-cmd }}
             --ss-isblocking ${{ inputs.ss-isblocking }}
+            --dockle-filepath ${{ inputs.dockle-filepath }}
+            --dockle-cmd ${{ inputs.dockle-cmd }}
+            --ds-isblocking ${{ inputs.ds-isblocking }}
       shell: bash
     - name: Upload artifact
       if: always()
