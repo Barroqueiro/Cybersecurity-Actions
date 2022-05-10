@@ -107,20 +107,24 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "DS" ] 
     then
-        ./$BUILD_SCRIPT
-        ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH "$DOCKLE_CMD" "$IMAGE_TAG"
-        if [ $? = 1 ]
-        then
-            if [ $SS_ISBLOCKING = "true" ]
+        if [ $BUILD_SCRIPT != "" ] || [ $IMAGE_TAG != "" ]
+            ./$BUILD_SCRIPT
+            ASSETS=$ACTION_PATH/$st
+            $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH "$DOCKLE_CMD" "$IMAGE_TAG"
+            if [ $? = 1 ]
             then
-                echo "::error::Dockle Scan found problems, check the artifacts for more information"
-                ret=1
+                if [ $SS_ISBLOCKING = "true" ]
+                then
+                    echo "::error::Dockle Scan found problems, check the artifacts for more information"
+                    ret=1
+                else
+                    echo "::notice::Dockle Scan found problems but non blocking was active during this run"
+                fi
             else
-                echo "::notice::Dockle Scan found problems but non blocking was active during this run"
+                echo "::notice::Dockle Scan did not find any problems"
             fi
         else
-            echo "::notice::Dockle Scan did not find any problems"
+            echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"
         fi
     fi
 done
