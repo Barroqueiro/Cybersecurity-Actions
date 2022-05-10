@@ -49,7 +49,7 @@ for file in $5; do
             prospector $3 -0 "$before" > "$prosp_file"
         fi
         radon cc $4 "$before" > "$radon_file"
-        python3 $assets/CodeReporting.py "$prosp_file" "$radon_file" > "$final_file"
+        python3 $assets/BadPracticesReporting.py "$prosp_file" "$radon_file" $assets > $dir/"$final_file"
         rm "$prosp_file" "$radon_file"
     fi
 done
