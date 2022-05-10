@@ -1,7 +1,7 @@
 # To help debugging
 set -x
 
-# Install, Run and Sumarise Horusec reporting
+# Install, Run and Sumarise Dockle reporting
 #
 # $1 --> Full path inside github worker to the folder where this script resides
 # $2 --> Dockle ignore file path inside the scanned repository

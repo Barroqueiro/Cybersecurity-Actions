@@ -53,6 +53,15 @@ inputs:
   ds-isblocking:
     description: 'Fail the workflow if the Dockle Scan finds vulnerabilities'
     default: 'true'
+  trivy-filepath:
+    description: 'Path within the scanned repository where the trivy ignore file is'
+    default: ''
+  trivy-cmd:
+    description: 'Aditional command line arguments to be passed to trivy'
+    default: ''
+  ts-isblocking:
+    description: 'Fail the workflow if the Trivy Scan finds vulnerabilities'
+    default: 'true'
 runs:
   using: "composite"
   steps:
@@ -78,6 +87,9 @@ runs:
             --dockle-filepath "${{ inputs.dockle-filepath }}"
             --dockle-cmd "${{ inputs.dockle-cmd }}"
             --ds-isblocking "${{ inputs.ds-isblocking }}"
+            --trivy-filepath "${{ inputs.trivy-filepath }}"
+            --trivy-cmd "${{ inputs.trivy-cmd }}"
+            --ts-isblocking "${{ inputs.ts-isblocking }}"
       shell: bash
     - name: Upload artifact
       if: always()
