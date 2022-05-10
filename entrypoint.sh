@@ -43,8 +43,9 @@ for st in "${scan_type[@]}"; do
         $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
         if [ $? = 1 ]
         then
-            echo "::error::Game Over"
-            exit 0
+            echo "::error::Vulnerability Scan found problems, check the artifacts for more information"
+        else
+            echo "::notice::Vulnerability Scan did not find any problems"
         fi
     fi
 
@@ -52,5 +53,13 @@ for st in "${scan_type[@]}"; do
     then
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME $GITLEAKS_CMD $SECRETS_FILEPATH
+        if [ $? = 1 ]
+        then
+            echo "::error::Secrets Scan found problems, check the artifacts for more information"
+        else
+            echo "::notice::Secrets Scan did not find any problems"
+        fi
     fi
 done
+
+exit 0
