@@ -6,6 +6,7 @@ set -x
 # $1 --> Full path inside github worker to the folder where this script resides
 # $2 --> Dockle ignore file path inside the scanned repository
 # $3 --> Aditional Dockle command line arguments
+# $4 --> Image tag to scan
 
 # Directory configuration
 dir="Reports/DockleScan"
@@ -23,7 +24,7 @@ VERSION=$(
 sudo dpkg -i dockle.deb && rm dockle.deb
 
 # Run dockle against the image
-dockle --exit-code 1 $3 -f json -o DockleReport.json scan/scanimage:latest
+dockle --exit-code 1 $3 -f json -o DockleReport.json $4
 ret=$?
 
 # Sumarize reports

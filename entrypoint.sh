@@ -107,8 +107,9 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "DS" ] 
     then
+        ./$BUILD_SCRIPT
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH $DOCKLE_CMD
+        $ASSETS/InstallAndRunDockle.sh $ASSETS $DOCKLE_FILEPATH $DOCKLE_CMD $IMAGE_TAG
         if [ $? = 1 ]
         then
             if [ $SS_ISBLOCKING = "true" ]
