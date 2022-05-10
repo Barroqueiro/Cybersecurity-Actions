@@ -25,15 +25,17 @@ make build
 # Return to the repository to analise and do so outputting the result in json
 cd ../$2
 ../gitleaks/gitleaks detect --report-format json --report-path output.json $3
-ret=$?
+
 
 # Run Gitleaks
 if [ $4 != "" ] 
 then
     python3 $assets/SecretsReporting.py output.json $4 $1> $dir/SecretsReport.html
+    ret=$?
 else
     touch .ignoresecrets
     python3 $assets/SecretsReporting.py output.json .ignoresecrets $1 > $dir/SecretsReport.html
+    ret=$?
 fi
 
-exit ret
+exit $ret

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Exit codes:
-# Vulnerability Scan --> 
-
 function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
@@ -29,10 +26,14 @@ while [[ "$#" > 0 ]]; do case $1 in
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
   --horusec-filepath) HORUSEC_FILEPATH="$2"; shift;shift;;
   --horusec-cmd) HORUSEC_CMD="$2"; shift;shift;;
+  --vs-isblocking) VS_ISBLOCKING="$2"; shift;shift;;
   --gitleaks-cmd) GITLEAKS_CMD="$2"; shift;shift;;
   --secrets-filepath) SECRETS_FILEPATH="$2"; shift;shift;;
+  --vs-isblocking) SS_ISBLOCKING="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
+
+ret=0
 
 IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 
@@ -44,6 +45,10 @@ for st in "${scan_type[@]}"; do
         if [ $? = 1 ]
         then
             echo "::error::Vulnerability Scan found problems, check the artifacts for more information"
+            if [ $VS_ISBLOCKING = "true" ]
+            then
+                ret=1
+            fi
         else
             echo "::notice::Vulnerability Scan did not find any problems"
         fi
@@ -56,10 +61,14 @@ for st in "${scan_type[@]}"; do
         if [ $? = 1 ]
         then
             echo "::error::Secrets Scan found problems, check the artifacts for more information"
+            if [ $SS_ISBLOCKING = "true" ]
+            then
+                ret=1
+            fi
         else
             echo "::notice::Secrets Scan did not find any problems"
         fi
     fi
 done
 
-exit 0
+exit $ret

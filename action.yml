@@ -7,20 +7,26 @@ inputs:
     required: true
   horusec-filepath:
     description: 'Path within the scanned repository whe the horusec config file is'
-    deafult: ''
+    default: ''
   horusec-cmd:
     description: 'Aditional command line arguments to be passed to horusec'
-    deafult: ''
+    default: ''
+  vs-isblocking:
+    description: 'Fail the workflow if the Vulnerability Scan finds vulnerabilities'
+    default: 'true'
   gitleaks-cmd:
     description: 'Additional command line arguments to be passed to gitleaks'
     default: ''
   secrets-filepath:
     description: 'Hash of secrets to ignore during gitleaks run'
-    deafult: ''
+    default: ''
+  ss-isblocking:
+    description: 'Fail the workflow if the Secrets Scan finds secrets not accepted'
+    default: 'true'
 runs:
   using: "composite"
   steps:
-    - name: Running Horusec Security
+    - name: Entrypoint
       run: >
             ${{ github.action_path }}/entrypoint.sh 
             --action-path ${{ github.action_path }} 
@@ -28,8 +34,10 @@ runs:
             --scan-type ${{ inputs.scan-type}}
             --horusec-filepath ${{ inputs.horusec-filepath }}
             --horusec-cmd ${{ inputs.horusec-cmd }}
+            --vs-isblocking ${{ inputs.vs-isblocking }}
             --gitleaks-cmd ${{ inputs.gitleaks-cmd }}
             --secrets-filepath ${{ inputs.secrets-filepath }}
+            --ss-isblocking ${{ inputs.ss-isblocking }}
       shell: bash
     - name: Upload artifact
       if: always()
