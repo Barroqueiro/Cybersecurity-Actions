@@ -59,25 +59,25 @@ runs:
     - name: Entrypoint
       run: >
             ${{ github.action_path }}/entrypoint.sh 
-            --action-path ${{ github.action_path }}
-            --repo-name ${{ github.event.repository.name }}
-            --scan-type ${{ inputs.scan-type }}
-            --build-script ${{ inputs.build-script }}
-            --image-tag ${{ inputs.image-tag }}
-            --prosp-filepath ${{ inputs.prosp-filepath }}
-            --prosp-cmd ${{ inputs.prosp-cmd }}
-            --radon-cmd ${{ inputs.radon-cmd }}
-            --files-toscan ${{ inputs.files-toscan }}
-            --bp-isblocking ${{ inputs.bp-isblocking }}
-            --horusec-filepath ${{ inputs.horusec-filepath }}
-            --horusec-cmd ${{ inputs.horusec-cmd }}
-            --vs-isblocking ${{ inputs.vs-isblocking }}
-            --secrets-filepath ${{ inputs.secrets-filepath }}
-            --gitleaks-cmd ${{ inputs.gitleaks-cmd }}
-            --ss-isblocking ${{ inputs.ss-isblocking }}
-            --dockle-filepath ${{ inputs.dockle-filepath }}
+            --action-path "${{ github.action_path }}"
+            --repo-name "${{ github.event.repository.name }}"
+            --scan-type "${{ inputs.scan-type }}"
+            --build-script "${{ inputs.build-script }}"
+            --image-tag "${{ inputs.image-tag }}"
+            --prosp-filepath "${{ inputs.prosp-filepath }}"
+            --prosp-cmd "${{ inputs.prosp-cmd }}"
+            --radon-cmd "${{ inputs.radon-cmd }}"
+            --files-toscan "${{ inputs.files-toscan }}"
+            --bp-isblocking "${{ inputs.bp-isblocking }}"
+            --horusec-filepath "${{ inputs.horusec-filepath }}"
+            --horusec-cmd "${{ inputs.horusec-cmd }}"
+            --vs-isblocking "${{ inputs.vs-isblocking }}"
+            --secrets-filepath "${{ inputs.secrets-filepath }}"
+            --gitleaks-cmd "${{ inputs.gitleaks-cmd }}"
+            --ss-isblocking "${{ inputs.ss-isblocking }}"
+            --dockle-filepath "${{ inputs.dockle-filepath }}"
             --dockle-cmd "${{ inputs.dockle-cmd }}"
-            --ds-isblocking ${{ inputs.ds-isblocking }}
+            --ds-isblocking "${{ inputs.ds-isblocking }}"
       shell: bash
     - name: Upload artifact
       if: always()
