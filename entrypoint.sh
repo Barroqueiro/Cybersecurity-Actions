@@ -38,10 +38,10 @@ for st in "${scan_type[@]}"; do
     then
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
-        if [ $? == 1 ]
+        if [ $? = 1 ]
         then
             echo "Game Over"
-            exit 1
+            exit 5
         fi
     fi
 
