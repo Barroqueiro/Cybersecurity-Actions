@@ -36,9 +36,9 @@ for file in $5; do
         # Removing all / with \ to not cause problems with directory searching
         before=$file
         file=${file////\\}
-        prosp_file=./$dir/${file}_prospector.json
-        radon_file=./$dir/${file}_radon.html
-        final_file=./$dir/${file//$sufix/$empty}.html
+        prosp_file=${file}_prospector.json
+        radon_file=${file}_radon.html
+        final_file=${file//$sufix/$empty}.html
 
 
         # Run prospector and radon, compile results with the CodeReporting script, clean the files that are no longer useful
@@ -49,7 +49,7 @@ for file in $5; do
             prospector $3 -0 "$before" > "$prosp_file"
         fi
         radon cc $4 "$before" > "$radon_file"
-        python3 $reporting/CodeReporting.py "$prosp_file" "$radon_file" > "$final_file"
+        python3 $dir/CodeReporting.py "$prosp_file" "$radon_file" > "$final_file"
         rm "$prosp_file" "$radon_file"
     fi
 done
