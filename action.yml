@@ -62,8 +62,8 @@ runs:
             --action-path ${{ github.action_path }}
             --repo-name ${{ github.event.repository.name }}
             --scan-type ${{ inputs.scan-type }}
-            --build-script ${{ github.build-script }}
-            --image-tag ${{ github.image-tag }}
+            --build-script ${{ inputs.build-script }}
+            --image-tag ${{ inputs.image-tag }}
             --prosp-filepath ${{ inputs.prosp-filepath }}
             --prosp-cmd ${{ inputs.prosp-cmd }}
             --radon-cmd ${{ inputs.radon-cmd }}
