@@ -24,6 +24,7 @@ empty=""
 mkdir -p $dir
 
 for file in "${@:5}"; do
+    echo $file
     if [[ $file =~ \.py$ ]]; then
 
         # Removing all / with \ to not cause problems with directory searching
