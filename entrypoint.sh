@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit codes:
+# Vulnerability Scan --> 
+
 function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
@@ -40,7 +43,7 @@ for st in "${scan_type[@]}"; do
         $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
         if [ $? = 1 ]
         then
-            echo "Game Over"
+            echo "::error::Game Over"
             exit 5
         fi
     fi
