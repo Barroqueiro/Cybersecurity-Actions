@@ -5,6 +5,21 @@ inputs:
   scan-type:
     descripton: 'Type of scan to run [ Container Scan (CS), Bad Practices (BP), Vulnerability Scan (VS), Secret Scan (SS) ]'
     required: true
+  prosp-filepath:
+    description: 'Path within the scanned repository whe the prospector profile file is'
+    default: ''
+  prosp-cmd:
+    description: 'Aditional command line arguments to be passed to prospector'
+    default: ''
+  radon-cmd:
+    description: 'Aditional command line arguments to be passed to radon'
+    default: ''
+  files-toscan:
+    description: 'Files to perform Bad Practices on'
+    deafult: ''
+  bp-isblocking:
+    description: 'Fail the workflow if the Bad Practices Scan finds any problems'
+    default: 'true'
   horusec-filepath:
     description: 'Path within the scanned repository whe the horusec config file is'
     default: ''
@@ -31,7 +46,12 @@ runs:
             ${{ github.action_path }}/entrypoint.sh 
             --action-path ${{ github.action_path }} 
             --repo-name ${{ github.event.repository.name }}
-            --scan-type ${{ inputs.scan-type}}
+            --scan-type ${{ inputs.scan-type }}
+            --prosp-filepath ${{ inputs.prosp-filepath }}
+            --prosp-cmd ${{ inputs.prosp-cmd }}
+            --radon-cmd ${{ inputs.radon-cmd }}
+            --files-toscan ${{ inputs.files-toscan }}
+            --bp-isblocking ${{ inputs.bp-isblocking }}
             --horusec-filepath ${{ inputs.horusec-filepath }}
             --horusec-cmd ${{ inputs.horusec-cmd }}
             --vs-isblocking ${{ inputs.vs-isblocking }}

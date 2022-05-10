@@ -24,6 +24,11 @@ while [[ "$#" > 0 ]]; do case $1 in
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
+  --prosp-filepath) PROSP_FILEPATH="$2"; shift;shift;;
+  --prosp-cmd) PROSP_CMD="$2"; shift;shift;;
+  --radon-cmd) RADON_CMD="$2"; shift;shift;;
+  --files-toscan) FILES-TOSCAN="$2"; shift;shift;;
+  --bp-isblocking) BP_ISBLOCKING="$2"; shift;shift;;
   --horusec-filepath) HORUSEC_FILEPATH="$2"; shift;shift;;
   --horusec-cmd) HORUSEC_CMD="$2"; shift;shift;;
   --vs-isblocking) VS_ISBLOCKING="$2"; shift;shift;;
@@ -38,6 +43,22 @@ ret=0
 IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 
 for st in "${scan_type[@]}"; do
+    if [ $st = "BP" ] 
+    then
+        ASSETS=$ACTION_PATH/$st
+        $ASSETS/InstallAndRunPropspectorAndRadon.sh $ASSETS $PROSP_FILEPATH $PROSP_CMD $RADON_CMD $FILES_TOSCAN
+        if [ $? = 1 ]
+        then
+            echo "::error::Bap Practices found problems, check the artifacts for more information"
+            if [ $BP_ISBLOCKING = "true" ]
+            then
+                ret=1
+            fi
+        else
+            echo "::notice::Bad Practices did not find any problems"
+        fi
+    fi
+
     if [ $st = "VS" ] 
     then
         ASSETS=$ACTION_PATH/$st
