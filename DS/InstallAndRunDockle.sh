@@ -30,7 +30,7 @@ ret=$?
 # Sumarize reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/DockleReporting.py DockleReport.json > $dir/DockleReport.html
+python3 $assets/DockleReporting.py DockleReport.json $assets > $dir/DockleReport.html
 mv DockleReport.json DockleReport.html $dir
 
 exit $ret
