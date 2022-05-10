@@ -46,6 +46,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
+mkdir "Reports"
+
 ret=0
 
 IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
