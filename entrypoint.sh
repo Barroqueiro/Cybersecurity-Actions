@@ -27,7 +27,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   --prosp-filepath) PROSP_FILEPATH="$2"; shift;shift;;
   --prosp-cmd) PROSP_CMD="$2"; shift;shift;;
   --radon-cmd) RADON_CMD="$2"; shift;shift;;
-  --files-toscan) FILES-TOSCAN="$2"; shift;shift;;
+  --files-toscan) FILES-TOSCAN='"$2"'; shift;shift;;
   --bp-isblocking) BP_ISBLOCKING="$2"; shift;shift;;
   --horusec-filepath) HORUSEC_FILEPATH="$2"; shift;shift;;
   --horusec-cmd) HORUSEC_CMD="$2"; shift;shift;;
