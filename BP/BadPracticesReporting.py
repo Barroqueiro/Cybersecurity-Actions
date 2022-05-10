@@ -1,5 +1,6 @@
 # Script developed to sumarize prospector and radon json reports and output results into a html file
 
+from importlib.resources import read_text
 import sys
 import json
 from datetime import datetime
@@ -30,14 +31,16 @@ RADON_LEGEND = """
 def make_vulns(messages):
     messages = sorted(messages,key=lambda messages:messages["location"]["line"])
     vulns = {"Issues":[]}
+    ret = 0
     for msg in messages:
+        ret = 1
         tool = msg["source"]
         code = msg["code"]
         line = msg["location"]["line"]
         m = msg["message"]
         vulns["Issues"].append({"tool":tool,"code":code,"line":line,"message":m})
     
-    return vulns
+    return ret,vulns
 
 # Print the radon legend
 # Parse the radon output by line and extracting all componenents
@@ -63,13 +66,14 @@ def main():
     with open(sys.argv[2],"r",encoding="UTF-8") as rad:
         radon = rad.readlines()
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    vulns = make_vulns(data["messages"])
+    ret,vulns = make_vulns(data["messages"])
     radon_cc = make_radon(radon)
     env = Environment(loader=FileSystemLoader(sys.argv[3]))
     template = env.get_template('BadPracticesTemplate.jinja2')
     radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
     output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_lengend=RADON_LEGEND,today=today,radon_colors=radon_colors)
     print(output_from_parsed_template)
+    exit(ret)
 
 if __name__ == "__main__":
     main()

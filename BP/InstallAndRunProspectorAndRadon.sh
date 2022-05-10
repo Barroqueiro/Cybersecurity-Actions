@@ -29,8 +29,9 @@ empty=""
 # Directory where reports will be uploaded from
 mkdir -p $dir
 
+ret=0
+
 for file in $5; do
-    echo $file
     if [[ $file =~ \.py$ ]]; then
 
         # Removing all / with \ to not cause problems with directory searching
@@ -50,6 +51,13 @@ for file in $5; do
         fi
         radon cc $4 "$before" > "$radon_file"
         python3 $assets/BadPracticesReporting.py "$prosp_file" "$radon_file" $assets > $dir/"$final_file"
+        temp=$?
+        if [ $temp = 1 ] 
+        then
+            ret=1
+        fi
         rm "$prosp_file" "$radon_file"
     fi
 done
+
+exit $ret
