@@ -52,10 +52,12 @@ for st in "${scan_type[@]}"; do
         $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH $PROSP_CMD "$RADON_CMD" "$FILES_TOSCAN"
         if [ $? = 1 ]
         then
-            echo "::error::Bap Practices found problems, check the artifacts for more information"
             if [ $BP_ISBLOCKING = "true" ]
             then
+                echo "::error::Bad Practices found problems, check the artifacts for more information"
                 ret=1
+            else
+                echo "::notice::Bad Practices found problems but non blocking was active during this run"
             fi
         else
             echo "::notice::Bad Practices did not find any problems"
@@ -68,10 +70,12 @@ for st in "${scan_type[@]}"; do
         $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
         if [ $? = 1 ]
         then
-            echo "::error::Vulnerability Scan found problems, check the artifacts for more information"
             if [ $VS_ISBLOCKING = "true" ]
             then
+                echo "::error::Vulnerability Scan found problems, check the artifacts for more information"
                 ret=1
+            else
+                echo "::notice::Vulnerability Scan found problems but non blocking was active during this run"
             fi
         else
             echo "::notice::Vulnerability Scan did not find any problems"
@@ -84,10 +88,12 @@ for st in "${scan_type[@]}"; do
         $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME $GITLEAKS_CMD $SECRETS_FILEPATH
         if [ $? = 1 ]
         then
-            echo "::error::Secrets Scan found problems, check the artifacts for more information"
             if [ $SS_ISBLOCKING = "true" ]
             then
+                echo "::error::Secrets Scan found problems, check the artifacts for more information"
                 ret=1
+            else
+                echo "::notice::Secrets Scan found problems but non blocking was active during this run"
             fi
         else
             echo "::notice::Secrets Scan did not find any problems"
