@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# To help debugging
 set -x
 
 function usage() {
@@ -48,7 +49,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "BP" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH $PROSP_CMD $RADON_CMD "$FILES_TOSCAN"
+        $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH $PROSP_CMD "$RADON_CMD" "$FILES_TOSCAN"
         if [ $? = 1 ]
         then
             echo "::error::Bap Practices found problems, check the artifacts for more information"

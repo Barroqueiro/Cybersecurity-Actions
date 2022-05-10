@@ -29,7 +29,7 @@ empty=""
 # Directory where reports will be uploaded from
 mkdir -p $dir
 
-for file in "${@:5}"; do
+for file in $5; do
     echo $file
     if [[ $file =~ \.py$ ]]; then
 
