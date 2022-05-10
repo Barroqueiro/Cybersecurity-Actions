@@ -44,7 +44,7 @@ for st in "${scan_type[@]}"; do
         if [ $? = 1 ]
         then
             echo "::error::Game Over"
-            exit 5
+            exit 0
         fi
     fi
 
