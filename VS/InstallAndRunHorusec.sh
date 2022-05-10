@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# To help debugging
+set -x
+
 # Install, Run and Sumarise Horusec reporting
 #
 # $1 --> Full path inside github worker to the folder where this script resides
