@@ -29,6 +29,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
   --build-script) BUILD_SCRIPT="$2"; shift;shift;;
   --image-tag) IMAGE_TAG="$2"; shift;shift;;
+  --run-script) RUN_SCRIPT="$2"; shift;shift;;
   --prosp-filepath) PROSP_FILEPATH="$2"; shift;shift;;
   --prosp-cmd) PROSP_CMD="$2"; shift;shift;;
   --radon-cmd) RADON_CMD="$2"; shift;shift;;
@@ -46,6 +47,10 @@ while [[ "$#" > 0 ]]; do case $1 in
   --trivy-filepath) TRIVY_FILEPATH="$2"; shift;shift;;
   --trivy-cmd) TRIVY_CMD="$2"; shift;shift;;
   --ts-isblocking) TS_ISBLOCKING="$2"; shift;shift;;
+  --zap-filepath) ZAP_FILEPATH="$2"; shift;shift;;
+  --zap-cmd) ZAP_CMD="$2"; shift;shift;;
+  --zap-target) ZAP_TARGET="$2"; shift;shift;;
+  --ts-isblocking) ZS_ISBLOCKING="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
@@ -162,30 +167,28 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "ZS" ] 
     then
-        ./$BUILD_SCRIPT
-        ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunZaproxy.sh
-        # if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ]
-        # then
-        #     ./$BUILD_SCRIPT
-        #     ASSETS=$ACTION_PATH/$st
-        #     $ASSETS/InstallAndRunTrivy.sh $ASSETS $TRIVY_FILEPATH "$TRIVY_CMD" "$IMAGE_TAG"
-        #     if [ $? = 1 ]
-        #     then
-        #         if [ $TS_ISBLOCKING = "true" ]
-        #         then
-        #             echo "::error::Trivy Scan found problems, check the artifacts for more information"
-        #             ret=1
-        #         else
-        #             echo "::notice::Trivy Scan found problems but non blocking was active during this run"
-        #         fi
-        #     else
-        #         echo "::notice::Trivy Scan did not find any problems"
-        #     fi
-        # else
-        #     echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"
-        #     ret=1
-        # fi
+        if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ] && [ $RUN_SCRIPT != "" ]
+        then
+            ./$BUILD_SCRIPT
+            ./$RUN_SCRIPT
+            ASSETS=$ACTION_PATH/$st
+            $ASSETS/InstallAndRunZaproxy.sh $ASSETS $ZAP_FILEPATH "$ZAP_CMD" "$ZAP_TARGET"
+            if [ $? = 1 ]
+            then
+                if [ $ZS_ISBLOCKING = "true" ]
+                then
+                    echo "::error::Zap Scan found problems, check the artifacts for more information"
+                    ret=1
+                else
+                    echo "::notice::Zap Scan found problems but non blocking was active during this run"
+                fi
+            else
+                echo "::notice::Zap Scan did not find any problems"
+            fi
+        else
+            echo "::error::For a Dynamic scan there needs to be a build script,a image tag and a run script passed as arguments"
+            ret=1
+        fi
     fi
 done
 

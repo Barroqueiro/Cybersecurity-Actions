@@ -27,7 +27,6 @@ def main():
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     vuln_list = data["analysisVulnerabilities"]
     vulns = make_vulns(vuln_list)
-    print(sys.argv[2])
     env = Environment(loader=FileSystemLoader(sys.argv[2]))
     template = env.get_template('HorusecTemplate.jinja2')
     colors = {"CRITICAL":"#F3836B","HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","UNKNOWN":"#53DAC1"}

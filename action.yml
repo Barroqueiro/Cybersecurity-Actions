@@ -11,6 +11,9 @@ inputs:
   image-tag:
     description: 'Tag by which we can identify the image'
     default: ''
+  run-script:
+    description: 'Script used to run the image within the github actions worker'
+    default: ''
   prosp-filepath:
     description: 'Path within the scanned repository where the prospector profile file is'
     default: ''
@@ -62,6 +65,18 @@ inputs:
   ts-isblocking:
     description: 'Fail the workflow if the Trivy Scan finds vulnerabilities'
     default: 'true'
+  zap-filepath:
+    description: 'Path within the scanned repository where the zap ignore file is'
+    default: ''
+  zap-cmd:
+    description: 'Aditional command line arguments to be passed to zap'
+    default: ''
+  zap-target:
+    description: 'Target for zap to analyse'
+    default: ''
+  zs-isblocking:
+    description: 'Fail the workflow if the Trivy Scan finds vulnerabilities'
+    default: ''
 runs:
   using: "composite"
   steps:
@@ -73,6 +88,7 @@ runs:
             --scan-type "${{ inputs.scan-type }}"
             --build-script "${{ inputs.build-script }}"
             --image-tag "${{ inputs.image-tag }}"
+            --run-script "${{ inputs.run-script }}"
             --prosp-filepath "${{ inputs.prosp-filepath }}"
             --prosp-cmd "${{ inputs.prosp-cmd }}"
             --radon-cmd "${{ inputs.radon-cmd }}"
@@ -90,6 +106,10 @@ runs:
             --trivy-filepath "${{ inputs.trivy-filepath }}"
             --trivy-cmd "${{ inputs.trivy-cmd }}"
             --ts-isblocking "${{ inputs.ts-isblocking }}"
+            --zap-filepath "${{ inputs.zap-filepath }}"
+            --zap-cmd "${{ inputs.zap-cmd }}"
+            --zap-target "${{ inputs.zap-target }}"
+            --zs-isblocking "${{ inputs.zs-isblocking }}"
       shell: bash
     - name: Upload artifact
       if: always()

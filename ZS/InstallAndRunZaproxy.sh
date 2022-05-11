@@ -3,24 +3,27 @@
 # To help debugging
 set -x
 
-# Install, Run and Sumarise Horusec reporting
+# Install, Run and Sumarise Zap reporting
 #
 # $1 --> Full path inside github worker to the folder where this script resides
-# $2 --> Horusec config file path inside the scanned repository
-# $3 --> Aditional horusec command line arguments
+# $2 --> ZAP config file path inside the scanned repository
+# $3 --> Aditional Zap command line arguments
+# $4 --> Target to analyse
 
 # Directory configuration
 dir="Reports/ZapScan"
 assets="$1"
 
-mkdir $dir
-
-docker run --rm -d -p 5050:5050 scan/scanimage:latest
-
 volume="zap/wrk/"
 
 mkdir -p $volume
 
-docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t http://localhost:5050/ -g gen.conf -J jsonreport.json -r testreport.html
+docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c $2 -J ZapReport.json $3
+ret=$?
 
-mv -v jsonreport.json testreport.html $dir/
+mkdir -p $dir
+python3 -m pip install Jinja2
+python3 $assets/ZapReporting.py ZapReport.json $assets $dir/ZapReport.html
+mv TrivyReport.json  $dir
+
+exit $ret
