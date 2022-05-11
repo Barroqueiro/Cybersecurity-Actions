@@ -15,9 +15,7 @@ assets="$1"
 
 docker run --rm -d -p 5050:5050 scan/scanimage:latest
 
-volume="zap/wrk"
+mkdir -p $dir
 
-mkdir -p $volume
-
-docker run -v $(pwd):/$volume:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py \
+docker run --user root -v $(pwd):/dir:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py \
     -t http://localhost:5050/ -g gen.conf -r testreport.html
