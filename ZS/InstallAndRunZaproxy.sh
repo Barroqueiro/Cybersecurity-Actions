@@ -21,6 +21,4 @@ mkdir -p $volume
 
 docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t http://localhost:5050/ -g gen.conf -J jsonreport.json -r testreport.html
 
-sudo find / jsonreport.json
-
-mv -v "$volume/*" $dir/
+mv -v jsonreport.json testreport.html $dir/
