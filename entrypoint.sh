@@ -159,6 +159,33 @@ for st in "${scan_type[@]}"; do
             ret=1
         fi
     fi
+
+    if [ $st = "ZS" ] 
+    then
+        ASSETS=$ACTION_PATH/$st
+        $ASSETS/InstallAndRunZaproxy.sh
+        # if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ]
+        # then
+        #     ./$BUILD_SCRIPT
+        #     ASSETS=$ACTION_PATH/$st
+        #     $ASSETS/InstallAndRunTrivy.sh $ASSETS $TRIVY_FILEPATH "$TRIVY_CMD" "$IMAGE_TAG"
+        #     if [ $? = 1 ]
+        #     then
+        #         if [ $TS_ISBLOCKING = "true" ]
+        #         then
+        #             echo "::error::Trivy Scan found problems, check the artifacts for more information"
+        #             ret=1
+        #         else
+        #             echo "::notice::Trivy Scan found problems but non blocking was active during this run"
+        #         fi
+        #     else
+        #         echo "::notice::Trivy Scan did not find any problems"
+        #     fi
+        # else
+        #     echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"
+        #     ret=1
+        # fi
+    fi
 done
 
 exit $ret
