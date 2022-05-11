@@ -24,7 +24,7 @@ ret=$?
 # Sumarize the reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/TrivyReporting.py TrivyReport.json $assets> $dir/TrivyReport.html
+python3 $assets/TrivyReporting.py TrivyReport.json $assets $dir/TrivyReport.html
 mv TrivyReport.json  $dir
 
 exit $ret

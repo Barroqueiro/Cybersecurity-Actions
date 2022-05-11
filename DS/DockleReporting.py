@@ -29,7 +29,8 @@ def main():
     template = env.get_template('DockleTemplate.jinja2')
     colors = {"FATAL":"#F3836B","WARN":"#FFCD00","INFO":"#53DAC1"}
     output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
-    print(output_from_parsed_template)
+    with open(sys.argv[3],"w") as f:
+        f.write(output_from_parsed_template)
 
 if __name__ == "__main__":
     main()

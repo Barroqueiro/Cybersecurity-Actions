@@ -21,3 +21,5 @@ mkdir -p $volume
 
 docker run --user root -v $(pwd):/$volume:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py \
     -t http://localhost:5050/ -g gen.conf -r testreport.html
+
+mv $volume/* $dir/

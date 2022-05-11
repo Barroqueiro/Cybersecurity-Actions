@@ -29,7 +29,7 @@ fi
 # Sumarise reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/HorusecReporting.py ./full_report.json $assets > $dir/HorusecReport.html
+python3 $assets/HorusecReporting.py ./full_report.json $assets $dir/HorusecReport.html
 mv ./full_report.json $dir
 
 # Return with the exit code related to how the horusec run went

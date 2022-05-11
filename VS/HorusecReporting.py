@@ -32,7 +32,8 @@ def main():
     template = env.get_template('HorusecTemplate.jinja2')
     colors = {"CRITICAL":"#F3836B","HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","UNKNOWN":"#53DAC1"}
     output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
-    print(output_from_parsed_template)
+    with open(sys.argv[3],"w") as f:
+        f.write(output_from_parsed_template)
 
 if __name__ == "__main__":
     main()

@@ -72,7 +72,8 @@ def main():
     template = env.get_template('BadPracticesTemplate.jinja2')
     radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
     output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_lengend=RADON_LEGEND,today=today,radon_colors=radon_colors)
-    print(output_from_parsed_template)
+    with open(sys.argv[4],"w") as f:
+        f.write(output_from_parsed_template)
     exit(ret)
 
 if __name__ == "__main__":

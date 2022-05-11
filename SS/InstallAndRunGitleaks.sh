@@ -37,7 +37,7 @@ then
     ret=$?
 else
     touch .ignoresecrets
-    python3 $assets/SecretsReporting.py output.json .ignoresecrets $1 > $dir/SecretsReport.html
+    python3 $assets/SecretsReporting.py output.json .ignoresecrets $1 $dir/SecretsReport.html
     ret=$?
 fi
 
