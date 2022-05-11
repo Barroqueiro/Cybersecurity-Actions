@@ -13,6 +13,8 @@ set -x
 dir="Reports/ZapScan"
 assets="$1"
 
+mkdir $dir
+
 docker run --rm -d -p 5050:5050 scan/scanimage:latest
 
 volume="zap/wrk/"
