@@ -49,7 +49,8 @@ def main():
     template = env.get_template('SecretsTemplate.jinja2')
     colors = {"SECRET":"#F3836B","ACCEPTED SECRET":"#50C878"}
     output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
-    print(output_from_parsed_template)
+    with open(sys.argv[4],"w") as f:
+        f.write(output_from_parsed_template)
     exit(ret)
 
 if __name__ == "__main__":
