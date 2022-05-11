@@ -17,21 +17,19 @@
   <div class="container">
     {% for key in vulns %}
       {% if vulns[key] != [] %}
-          <a class="btn btn-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black">
+          <a class="btn btn-outline-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black; border-color: black">
               {{ key }} Severity Vulnerabilities
           </a>
           <div>&nbsp;</div>
           <div class="collapse" id="{{key}}">
             {% for vuln in vulns[key] %}
-                    <table class="table">
-                      <thead style="background-color: {{ colors[key] }};">
+                    <table class="table table-bordered table-hover">
+                      <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#{{ key }}Vulnerability{{ loop.index }}" role="button" aria-expanded="true" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black;; border-color: black">
+                            {{ key }} Vulnerability {{ loop.index }}
+                      </a>
+                      <tbody class="collapse show" id="{{ key }}Vulnerability{{ loop.index }}">
                         <tr>
-                          <td class="text-center" colspan="2">{{ key }} Vulnerability {{ loop.index }}</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>File</td>
+                          <td style="padding: 5px;">File</td>
                           <td>{{ vuln["file"] }}</td>
                         </tr>
                         <tr>
