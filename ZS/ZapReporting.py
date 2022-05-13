@@ -40,7 +40,7 @@ def make_vulns(sites):
                 name = a["name"]
                 risk = a["riskdesc"].split(" ")
                 severity = "IGNORED"
-                confidence = "HIGH"
+                confidence = "High"
                 instances = a["instances"]
                 solution = a["solution"]
                 references = a["reference"].split("<p>")[1:]
