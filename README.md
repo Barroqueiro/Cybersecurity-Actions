@@ -6,10 +6,10 @@
 
 ## Description
 
-A Github actions package with 6 different types of scans, oriented for cyber-security in offers:
+A Github actions package with 6 different types of scans, oriented for cyber-security, it offers:
     
 - Bad Practices Scan for python using Prospector and Radon
-- Vulnerability Scanning withing the code and it's dependencies using Horusec
+- Vulnerability Scanning within the code and it's dependencies using Horusec
 - Secrets Scanning within the full repositorie's history using Gitleaks
 - Docker File Linting to find sub optimal choices using Dockle
 - Docker Image Scanning to find vulnerable packages using Trivy
@@ -34,7 +34,7 @@ The following sections include the configurable parameters within this actions, 
     with:
         <name>:<value>
 
-Note: These parameters must be configured with care, most of them are easy to use, but attention to the option to pass custom arguments to a tool, these arguments must not disrupt the normal flow of the action of there can be unexpected consequences.
+Note: These parameters must be configured with care, most of them are easy to use, but attention to the option to pass custom arguments to a tool, these arguments must not disrupt the normal flow of the action or there can be unexpected consequences.
 
 ### Types of scans
 
@@ -51,7 +51,7 @@ Types of scans and what they can offer (Related in a 1 to 1 relationship to the 
 - Trivy Scan: TS
 - Zap Scan: ZS
 
-These can be used separatly or togheter passing them separated by commas
+These can be used separatly or together passing them separated by commas
 
 #### **Examples**
 
