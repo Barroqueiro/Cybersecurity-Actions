@@ -167,7 +167,7 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "ZS" ] 
     then
-        if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ] && [ $RUN_SCRIPT != "" ]
+        if [ $BUILD_SCRIPT != "" ] && [ $RUN_SCRIPT != "" ]
         then
             ./$BUILD_SCRIPT
             ./$RUN_SCRIPT

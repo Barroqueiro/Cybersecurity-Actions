@@ -1,1 +1,338 @@
 # Cybersecurity-Actions
+
+## Author
+
+    Dinis Cruz
+
+## Description
+
+A Github actions package with 6 different types of scans, oriented for cyber-security in offers:
+    
+- Bad Practices Scan for python using Prospector and Radon
+- Vulnerability Scanning withing the code and it's dependencies using Horusec
+- Secrets Scanning within the full repositorie's history using Gitleaks
+- Docker File Linting to find sub optimal choices using Dockle
+- Docker Image Scanning to find vulnerable packages using Trivy
+- Dynamic Analysis for a locally ran instance using Zaproxy
+
+## Objectives
+
+This actions was constructed with the following objectives in mind:
+
+- Prefered use of open-source tools
+- Keeping everything within Github
+- Keep both the actions, and the usage as simple to maintain as possible
+
+## Usage
+
+    - uses: barroqueiro/Cybersecurity-Actions@<Version (v?.?.?)>
+
+## Configurable options
+
+The following sections include the configurable parameters within this actions, these can be configured using with with keyword on the workflow yaml syntax.
+
+    with:
+        <name>:<value>
+
+Note: These parameters must be configured with care, most of them are easy to use, but attention to the option to pass custom arguments to a tool, these arguments must not disrupt the normal flow of the action of there can be unexpected consequences.
+
+### Types of scans
+
+    Name: scan-type
+    Required: True
+    Default: Not Applicable
+
+Types of scans and what they can offer (Related in a 1 to 1 relationship to the description section):
+
+- Bad Practices Scan: BP
+- Vulnerability Scan: VS
+- Secrets Scan: SS
+- Dockle Scan: DS
+- Trivy Scan: TS
+- Zap Scan: ZS
+
+These can be used separatly or togheter passing them separated by commas
+
+#### **Examples**
+
+Using every scan:
+
+    with:
+        scan-type: 'BP,VS,SS,DS,TS,ZS'
+
+Using only the vulnerability scan:
+
+    with:
+        scan-type: 'VS'
+
+### Docker Related parameters
+
+#### **Build Script**
+
+    Path to a script used to build the docker image to analyse
+
+    Name: build-script
+    Required: For any image related scan (DS,TS,ZS)
+    Default: ''
+
+
+#### **Run Script**
+
+Path to a script used to locally run the instance to analyse
+
+    Name: run-script
+    Required: For ZS type of scan
+    Default: ''
+
+#### **Image tag**
+
+To keep track of the images, this parameter keeps the tag on the image created
+
+    Name: image-tag
+    Required: TS,DS type of scan to pass which image they are analysing
+    Default: ''
+
+Notes concerning Docker Related parameters:
+
+- Every path file must be from the repository the action is analysing
+- The build script must tag the image with the same tag passed as a parameter
+- The run script must run the image locally and expose it's service to localhost so zap can access the instance
+
+#### **Example**
+
+    with:
+        build-script: 'ActionFiles/build.sh'
+        image-tag: 'scan/scanimage:latest'
+        run-script: 'ActionFiles/run.sh'
+
+Use the scripts build.sh and run.sh in the ActionFiles folder of the repository to build and run the image. The image is tagged with: scan/scanimage:latest
+
+### Bad Practices Related parameters
+
+#### **Custom Prospector Profile**
+
+Path to a [prospector profile](https://prospector.landscape.io/en/master/profiles.html) to be used by the prospector run
+
+    Name: prosp-filepath
+    Required: False
+    Default: ''
+
+#### **Prospector Command Line Arguments**
+
+Aditional [command line arguments](https://prospector.landscape.io/en/master/usage.html) to be used during the prospector run
+
+    Name: prosp-cmd
+    Required: False
+    Default: ''
+
+#### **Radon Command Line Arguments**
+
+Aditional [command line arguments](https://radon.readthedocs.io/en/latest/commandline.html#the-cc-command) to be used during the radon run
+
+    Name: radon-cmd
+    Required: False
+    Default: ''
+
+#### **Files to scan**
+
+A list separated by spaces of files to be scanned by the bad practices module, this exists because with projects that already started, linting every python file will produce to much output. This can configured with something like [Get changed files](https://github.com/tj-actions/changed-files) to make sure that the linting process only happens on the pushed files to the repository instead of the full repository.
+
+    Name: files-toscan
+    Required: False
+    Default: ''
+
+#### **Example**
+
+    prosp-filepath: 'ActionFiles/prospector_profile.yaml'
+    prosp-cmd: '-8'
+    radon-cmd: '-n B'
+
+This will pass a custom profile to prospector located within the ActionFiles folder and run prospector with the -8 flag (It will ignore styling conventions) and radon with the -n flag (value B) to only care about functions that score lower than A.
+
+#### **Efficient Bad Practices Run**
+
+Using a workflow file to run bad practices like such:
+
+    Code-Security-Checks:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+            with:
+            fetch-depth: 0
+        - name: Get changed files using defaults
+            id: changed-files
+            uses: tj-actions/changed-files@v18.7
+        - uses: barroqueiro/Cybersecurity-Actions@v0.5.18
+            with:
+            scan-type: 'BP'
+            prosp-filepath: 'SecurityPipelineAssets/ConfigFiles/prospector_profile.yaml'
+            prosp-cmd: '-8'
+            radon-cmd: '-n B'
+            files-toscan: '"${{ steps.changed-files.outputs.all_changed_files }}"'
+
+We can pass the changed files that come from the changed-files action to the files-toscan like such
+
+### Vulnerable Scan Related parameters
+
+#### **Custom Horusec Config file**
+
+Path to a [Horusec config file](https://docs.horusec.io/docs/cli/commands-and-flags/#1-configuration-file) to be used by the horusec run
+
+    Name: horusec-filepath
+    Required: False
+    Default: ''
+
+#### **Prospector Command Line Arguments**
+
+Aditional [command line arguments](https://docs.horusec.io/docs/cli/commands-and-flags/#3-flags) to be used during the horusec run
+
+    Name: horusec-cmd
+    Required: False
+    Default: ''
+
+#### **Example**
+
+        horusec-filepath: 'ActionFiles/horusec-config.json'
+        horusec-cmd: '-p="./app"'
+    
+This will use the custom horusec file to configure horusec, and when horusec is ran it will only scan the folder /app (-p="./app")
+
+### Secrets Scan Related parameters
+
+#### **Secrets to ignore file**
+
+Path to a secrets ignore file, this is talked about later within the ignoring vulnerabilities section
+
+    Name: secrets-filepath
+    Required: False
+    Default: ''
+
+#### **Gitleaks Command Line Arguments**
+
+Aditional [command line arguments](https://github.com/zricethezav/gitleaks#usage) to be used during the gitleaks run
+
+    Name: gitleaks-cmd
+    Required: False
+    Default: ''
+
+#### **Example**
+
+    secrets-filepath: 'ActionFiles/.gitleaksignore'
+    gitleaks-cmd: '-v'
+
+This will use the .gitleaksignore file to ignore the secrets inside, and when gitleaks is ran it will run in verbose mode (-v)
+
+### Dockle Scan Related parameters
+
+#### **Dockle vulnerabilities to ignore file**
+
+Path to a [dockle ignore file](https://github.com/goodwithtech/dockle#ignore-the-specified-checkpoints)
+
+    Name: dockle-filepath
+    Required: False
+    Default: ''
+
+#### **Dockle Command Line Arguments**
+
+Aditional [command line arguments](https://github.com/goodwithtech/dockle#common-examples) to be used during the dockle run
+
+    Name: dockle-cmd
+    Required: False
+    Default: ''
+
+#### **Example**
+
+    dockle-filepath: 'ActionFiles/.dockleignore'
+    dockle-cmd: '--exit-level fatal'
+
+This will use the .dockleignore file to ignore the dockle vulnerabilities specified inside, and when dockle is ran it will only fail if it finds a fatal level vulnerability
+
+### Trivy Scan Related parameters
+
+#### **Trivy vulnerabilities to ignore file**
+
+Path to a [trivy ignore file](https://aquasecurity.github.io/trivy/v0.22.0/vulnerability/examples/filter/)
+
+    Name: trivy-filepath
+    Required: False
+    Default: ''
+
+#### **Trivy Command Line Arguments**
+
+Aditional [command line arguments](https://aquasecurity.github.io/trivy/v0.27.1/docs/references/cli/image/) to be used during the trivy run
+
+    Name: trivy-cmd
+    Required: False
+    Default: ''
+
+#### **Example**
+
+    trivy-filepath: 'ActionFiles/.trivyignore'
+    trivy-cmd: ' --severity MEDIUM,HIGH,CRITICAL,UNKNOWN'
+
+This will use the .trivyignore file to ignore the trivy vulnerabilities specified inside, and when trivy is ran it will omit low severity vulnerabilities
+
+### Zap Scan Related parameters
+
+#### **Zap rules file**
+
+Path to a [Zap rules file](https://www.zaproxy.org/docs/docker/baseline-scan/#configuration-file) to be used during the OWASP Zap run
+
+    Name: zap-filepath
+    Required: False
+    Default: ''
+
+#### **Zap Command Line Arguments**
+
+Aditional [command line arguments](https://www.zaproxy.org/docs/docker/full-scan/#usage) to be used during the zaproxy run
+
+    Name: zap-cmd
+    Required: False
+    Default: ''
+
+#### **Zap Target**
+
+Url to be scanned
+
+    Name: zap-target
+    Required: False
+    Default: ''
+
+#### **Example**
+
+    zap-filepath: 'ActionFiles/rules.tsv'
+    zap-cmd: '-a'
+    zap-target: 'http://localhost:5050/'
+
+This will use the rules.tsv file to ignore/pass or fail the zap vulnerabilities specified inside, include the alpha active and passive scan rules (-a) and scan the target at http://localhost:5050/
+
+### Workflow Blocking parameters
+
+Each type of scan can be configured to fail the workflow if any issues are found.
+
+This means there is a blocking parameter for each scan:
+
+    - [bp,vs,ss,ds,ts,zs]-isblocking
+
+These are true by default byt if anything different than the string 'true' is passed the blocking will be disabled and even tho reports will still be uploaded the workflow will exit with sucess.
+
+### Anotations that can be found
+
+Error Messages:
+
+Message indicating some scan found problems and failed the workflow because of them
+
+    [Type of scan] found problems, check the artifacts for more information
+
+Notice Messages:
+
+Message indicating some scan did not find issues
+
+    [Type of scan] did not find any problems
+
+Message indication some scan found problems but non blocking was active
+
+    [Type of scan] found problems but non blocking was active during this run
+
+### Artifacts that can be found
+

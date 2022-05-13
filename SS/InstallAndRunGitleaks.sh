@@ -41,4 +41,7 @@ else
     ret=$?
 fi
 
+mv output.json SecretsReport.json
+mv SecretsReport.json $dir
+
 exit $ret

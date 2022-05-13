@@ -24,6 +24,6 @@ ret=$?
 mkdir -p $dir
 python3 -m pip install Jinja2
 python3 $assets/ZapReporting.py ZapReport.json $assets $dir/ZapReport.html
-mv TrivyReport.json  $dir
+mv ZapReport.json $dir
 
 exit $ret
