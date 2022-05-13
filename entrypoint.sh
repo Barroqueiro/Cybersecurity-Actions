@@ -63,6 +63,10 @@ IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 for st in "${scan_type[@]}"; do
     if [ $st = "BP" ] 
     then
+        if [ $FILES_TOSCAN = "all" ]
+        then
+            $FILES_TOSCAN=$(find . -type f | grep "^.*\.py$")
+        fi
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH "$PROSP_CMD" "$RADON_CMD" "$FILES_TOSCAN"
         if [ $? = 1 ]

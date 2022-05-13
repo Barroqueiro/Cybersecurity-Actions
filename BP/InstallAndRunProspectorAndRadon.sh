@@ -13,9 +13,6 @@ set -x
 dir="Reports/BadPracticesScan"
 assets="$1"
 
-echo $4
-echo $5
-
 # Install both tools and jinja
 python3 -m pip install Jinja2
 python3 -m pip install radon
