@@ -65,7 +65,7 @@ for st in "${scan_type[@]}"; do
     then
         if [ $FILES_TOSCAN = "all" ]
         then
-            $FILES_TOSCAN=$(find . -type f | grep "^.*\.py$")
+            FILES_TOSCAN=$(find . -type f | grep "^.*\.py$")
         fi
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH "$PROSP_CMD" "$RADON_CMD" "$FILES_TOSCAN"
