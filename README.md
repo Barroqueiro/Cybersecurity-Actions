@@ -135,7 +135,7 @@ Aditional [command line arguments](https://radon.readthedocs.io/en/latest/comman
 
 #### **Files to scan**
 
-A list separated by spaces of files to be scanned by the bad practices module, this exists because with projects that already started, linting every python file will produce to much output. This can configured with something like [Get changed files](https://github.com/tj-actions/changed-files) to make sure that the linting process only happens on the pushed files to the repository instead of the full repository.
+A list separated by spaces of files to be scanned by the bad practices module, this exists because with projects that already started, linting every python file will produce to much output. This can be configured with something like [Get changed files](https://github.com/tj-actions/changed-files) to make sure that the linting process only happens on the pushed files to the repository instead of the full repository.
 
     Name: files-toscan
     Required: False
@@ -170,7 +170,7 @@ Using a workflow file to run bad practices like such:
             radon-cmd: '-n B'
             files-toscan: '"${{ steps.changed-files.outputs.all_changed_files }}"'
 
-We can pass the changed files that come from the changed-files action to the files-toscan like such
+We can pass the changed files that come from the changed-files action to the files-toscan parameter like such
 
 ### Vulnerable Scan Related parameters
 
@@ -322,13 +322,13 @@ These are true by default but if anything different than the string 'true' is pa
 
 ### Anotations that can be found
 
-Error Messages:
+#### **Error Messages**
 
 Message indicating some scan found problems and failed the workflow because of them
 
     [Type of scan] found problems, check the artifacts for more information
 
-Notice Messages:
+#### **Notice Messages**
 
 Message indicating some scan did not find issues
 
@@ -385,13 +385,13 @@ If at any point we get a false positive the SecretsReporting.py script will outp
 
 Dockle allows for ignoring of issues with a .dockleignore file already discussed above
 
-Note: the file does need to be called .dockleignore
+Note: The file does need to be called .dockleignore
 
 #### **Trivy Scan**
 
 Trivy allows for ignoring of issues with a .dockleignore file already discussed above
 
-Note: the file does need to be called .trivyignore
+Note: The file does need to be called .trivyignore
 
 #### **Zap Scan**
 
@@ -399,5 +399,5 @@ Zap works the other way arround, it will not fail by deafult when finding issues
 
 ### Choices Made
 
-Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way
+Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way (TODO)
 
