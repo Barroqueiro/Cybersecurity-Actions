@@ -31,6 +31,8 @@ mkdir -p $dir
 
 ret=0
 
+
+
 for file in $5; do
     if [[ $file =~ \.py$ ]]; then
 

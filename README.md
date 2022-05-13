@@ -69,7 +69,7 @@ Using only the vulnerability scan:
 
 #### **Build Script**
 
-    Path to a script used to build the docker image to analyse
+Path to a script used to build the docker image to analyse
 
     Name: build-script
     Required: For any image related scan (DS,TS,ZS)
@@ -314,7 +314,11 @@ This means there is a blocking parameter for each scan:
 
     - [bp,vs,ss,ds,ts,zs]-isblocking
 
-These are true by default byt if anything different than the string 'true' is passed the blocking will be disabled and even tho reports will still be uploaded the workflow will exit with sucess.
+These are true by default but if anything different than the string 'true' is passed the blocking will be disabled and even tho reports will still be uploaded the workflow will exit with sucess.
+
+#### **Example**
+
+    ss-isblocking: 'false'
 
 ### Anotations that can be found
 
@@ -335,6 +339,7 @@ Message indication some scan found problems but non blocking was active
     [Type of scan] found problems but non blocking was active during this run
 
 ### Artifacts that can be found
+
 
 
 ### Ignoring vulnerabilities
@@ -372,5 +377,9 @@ Note: the file does need to be called .trivyignore
 
 #### **Zap Scan**
 
-Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already references above.
+Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already references above
+
+### Choices Made
+
+Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way
 
