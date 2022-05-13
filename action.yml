@@ -25,7 +25,7 @@ inputs:
     default: ''
   files-toscan:
     description: 'Files to perform Bad Practices on'
-    deafult: ''
+    default: 'all'
   bp-isblocking:
     description: 'Fail the workflow if the Bad Practices Scan finds any problems'
     default: 'true'

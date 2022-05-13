@@ -64,7 +64,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "BP" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH $PROSP_CMD "$RADON_CMD" "$FILES_TOSCAN"
+        $ASSETS/InstallAndRunProspectorAndRadon.sh $ASSETS $PROSP_FILEPATH "$PROSP_CMD" "$RADON_CMD" "$FILES_TOSCAN"
         if [ $? = 1 ]
         then
             if [ $BP_ISBLOCKING = "true" ]
@@ -82,7 +82,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "VS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH $HORUSEC_CMD
+        $ASSETS/InstallAndRunHorusec.sh $ASSETS $HORUSEC_FILEPATH "$HORUSEC_CMD"
         if [ $? = 1 ]
         then
             if [ $VS_ISBLOCKING = "true" ]
@@ -100,7 +100,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "SS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME $GITLEAKS_CMD $SECRETS_FILEPATH
+        $ASSETS/InstallAndRunGitleaks.sh $ASSETS $REPO_NAME "$GITLEAKS_CMD" $SECRETS_FILEPATH
         if [ $? = 1 ]
         then
             if [ $SS_ISBLOCKING = "true" ]

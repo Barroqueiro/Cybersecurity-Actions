@@ -340,7 +340,25 @@ Message indication some scan found problems but non blocking was active
 
 ### Artifacts that can be found
 
+Always a structure like the one bellow
 
+├── BadPracticesScan
+│   └── Directories of the original repository
+├── DockleScan
+│   ├── DockleReport.html
+│   └── DockleReport.json
+├── SecretScan
+│   ├── SecretsReport.html
+│   └── SecretsReport.json
+├── TrivyScan
+│   ├── TrivyReport.html
+│   └── TrivyReport.json
+├── VulnerabilityScan
+│   ├── HorusecReport.html
+│   └── HorusecReport.json
+└── ZapScan
+    ├── ZapReport.html
+    └── ZapReport.json
 
 ### Ignoring vulnerabilities
 

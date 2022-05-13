@@ -19,18 +19,18 @@ curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scri
 # Run horusec
 if [ $2 != "" ] 
 then
-    horusec start -p="./" -e="true" -o="json" -O="./full_report.json" --config-file-path $2 $3
+    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" --config-file-path $2 $3
     ret=$?
 else
-    horusec start -p="./" -e="true" -o="json" -O="./full_report.json" $3
+    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" $3
     ret=$?
 fi
 
 # Sumarise reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/HorusecReporting.py ./full_report.json $assets $dir/HorusecReport.html
-mv ./full_report.json $dir
+python3 $assets/HorusecReporting.py ./HorusecReport.json $assets $dir/HorusecReport.html
+mv ./HorusecReport.json $dir
 
 # Return with the exit code related to how the horusec run went
 exit $ret
