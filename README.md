@@ -336,3 +336,41 @@ Message indication some scan found problems but non blocking was active
 
 ### Artifacts that can be found
 
+
+### Ignoring vulnerabilities
+
+#### **Bap practices**
+
+Radon only serves as quality of life information for methods and their complexity so there is no ignoring feature for radon
+
+Prospector allows for ignoring of issues with a custom prospector file already discussed above
+
+#### **Vulnerability Scan**
+
+Within the horusec report, for every vulnerability can be found a hash of said vulnerability. These hases are used to ignore them within the horusec config file.
+
+- horusecCliRiskAcceptHashes: Hashes of vulnerabilities that we have accepted the risk, this is the way to ignore vulnerabilities to stop them from appearing in the output
+- horusecCliSeveritiesToIgnore: What severities do we want to ignore, the default is INFO but we can for example ignore LOW
+- horusecCliFilesOrPathsToIgnore: We can chose paths to be ignored when checking for vulnerabilities
+- horusecCliFalsePositiveHashes: Similar to the risk accept hashes but these will be classified has being false positives (non vulnerabilities)
+
+#### **Secrets Scan**
+
+If at any point we get a false positive the SecretsReporting.py script will output a hash in every secret, taking that hash and adding it to the a text file, will make it so the next run wont block the workflow if if we use the secrets-filepath parameter to indicate this path.
+
+#### **Dockle Scan**
+
+Dockle allows for ignoring of issues with a .dockleignore file already discussed above
+
+Note: the file does need to be called .dockleignore
+
+#### **Trivy Scan**
+
+Trivy allows for ignoring of issues with a .dockleignore file already discussed above
+
+Note: the file does need to be called .trivyignore
+
+#### **Zap Scan**
+
+Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already references above.
+
