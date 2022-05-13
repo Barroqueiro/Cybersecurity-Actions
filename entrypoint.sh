@@ -50,7 +50,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   --zap-filepath) ZAP_FILEPATH="$2"; shift;shift;;
   --zap-cmd) ZAP_CMD="$2"; shift;shift;;
   --zap-target) ZAP_TARGET="$2"; shift;shift;;
-  --ts-isblocking) ZS_ISBLOCKING="$2"; shift;shift;;
+  --zs-isblocking) ZS_ISBLOCKING="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
