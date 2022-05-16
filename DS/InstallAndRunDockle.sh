@@ -12,7 +12,10 @@ set -x
 dir="Reports/DockleScan"
 assets="$1"
 
-mv $2 .
+if [ $2 != "" ]
+then
+    mv $2 .
+fi
 
 # Install dockle
 

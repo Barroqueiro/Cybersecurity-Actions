@@ -12,7 +12,10 @@ set -x
 dir="Reports/TrivyScan"
 assets="$1"
 
-mv $2 .
+if [ $2 != "" ]
+then
+    mv $2 .
+fi
 
 # Install trivy
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
