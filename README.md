@@ -379,7 +379,7 @@ Within the horusec report, for every vulnerability can be found a hash of said v
 
 #### **Secrets Scan**
 
-If at any point we get a false positive the SecretsReporting.py script will output a hash in every secret, taking that hash and adding it to the a text file, will make it so the next run wont block the workflow if if we use the secrets-filepath parameter to indicate this path.
+If at any point we get a false positive the SecretsReporting.py script will output a hash in every secret, taking that hash and adding it to the a text file, will make it so the next run wont block the workflow if we use the secrets-filepath parameter to indicate this path.
 
 #### **Dockle Scan**
 

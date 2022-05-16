@@ -70,7 +70,7 @@ Shell script that will:
 
 Note: The strategy used to make file paths was to replace all forward-slashes (/) by backwards-slashes (\\) which makes linux read this as a file path and not a full path, but when exporting as a zip, when decompressed it creates the full paths with all directories, making the appearance much better, a happy little coincidence.
 
-### CodeReporting.py
+### BadPracticesReporting.py
 A parser that takes as the first argument a prospector report, as second argument a radon report and as thrid argument the place from where it can find it's jinja2 template.
 
 Present only the relevant information from both reports to a html file.

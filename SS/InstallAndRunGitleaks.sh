@@ -33,7 +33,7 @@ cd ../$2
 # Run Gitleaks
 if [ $4 != "" ] 
 then
-    python3 $assets/SecretsReporting.py output.json $4 $1> $dir/SecretsReport.html
+    python3 $assets/SecretsReporting.py output.json $4 $1 $dir/SecretsReport.html
     ret=$?
 else
     touch .ignoresecrets
