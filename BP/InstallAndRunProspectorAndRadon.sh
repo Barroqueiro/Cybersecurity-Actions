@@ -42,9 +42,9 @@ for file in $5; do
         # Run prospector and radon, compile results with the BadPracticesReporting script, clean the files that are no longer useful
         if [ $2 != "" ] 
         then
-            prospector $3 --profile $2 -0 "$before" > "$prosp_file"
+            prospector --output-format json:$prosp_file $3 --profile $2 -0 "$before"
         else
-            prospector $3 -0 "$before" > "$prosp_file"
+            prospector --output-format json:$prosp_file $3 -0 "$before"
         fi
         radon cc $4 "$before" > "$radon_file"
         python3 $assets/BadPracticesReporting.py "$prosp_file" "$radon_file" $assets $dir/"$final_file"
