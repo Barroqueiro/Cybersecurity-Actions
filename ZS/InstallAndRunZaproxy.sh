@@ -18,8 +18,14 @@ volume="zap/wrk/"
 
 mkdir -p $volume
 
-docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c $2 -J ZapReport.json $3
-ret=$?
+if [ $2 != "" ] 
+then
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
+    ret=$?
+else
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -J ZapReport.json $3
+    ret=$?
+fi
 
 mkdir -p $dir
 python3 -m pip install Jinja2
