@@ -29,7 +29,7 @@ RADON_LEGEND = """
 # Order the issues by line
 # Print the most important atributes by issue found
 def make_vulns(messages):
-    messages = sorted(messages,key=lambda messages:messages["location"]["line"])
+    messages = sorted(messages,key=lambda messages:messages["location"]["line"] if messages["location"]["line"] != None else 0)
     vulns = {"Issues":[]}
     ret = 0
     for msg in messages:
