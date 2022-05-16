@@ -49,16 +49,16 @@ def make_radon(radon):
     res = {"F":[],"E":[],"D":[],"C":[],"B":[],"A":[]}
     radon = radon[1:]
     for complexity in radon:
-        try:
-            complexity = complexity.replace("\n","")
-            complexity_split = complexity.split(" ")[4:]
+        complexity = complexity.replace("\n","")
+        complexity_split = complexity.split(" ")[4:]
+        if complexity_split[0] in RADON_DICT:
             block = RADON_DICT[complexity_split[0]]
-            line = complexity_split[1].split(":")[0]
-            name = complexity_split[2]
-            score = complexity_split[-1]
-            res[score].append({"block":block,"line":line,"name":name})
-        except Exception as e:
-            print(e)
+        else:
+            continue
+        line = complexity_split[1].split(":")[0]
+        name = complexity_split[2]
+        score = complexity_split[-1]
+        res[score].append({"block":block,"line":line,"name":name})
     return res
 
 # Load the prospector and radon reports
