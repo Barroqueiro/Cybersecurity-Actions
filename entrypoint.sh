@@ -176,7 +176,7 @@ for st in "${scan_type[@]}"; do
             ./$BUILD_SCRIPT
             ./$RUN_SCRIPT
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunZaproxy.sh $ASSETS $ZAP_FILEPATH "$ZAP_CMD" "$ZAP_TARGET"
+            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
             if [ $? = 1 ]
             then
                 if [ $ZS_ISBLOCKING = "true" ]
