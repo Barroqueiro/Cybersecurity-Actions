@@ -168,7 +168,7 @@ Using a workflow file to run bad practices like such:
             prosp-filepath: 'SecurityPipelineAssets/ConfigFiles/prospector_profile.yaml'
             prosp-cmd: '-8'
             radon-cmd: '-n B'
-            files-toscan: '"${{ steps.changed-files.outputs.all_changed_files }}"'
+            files-toscan: '${{ steps.changed-files.outputs.all_changed_files }}'
 
 We can pass the changed files that come from the changed-files action to the files-toscan parameter like such
 

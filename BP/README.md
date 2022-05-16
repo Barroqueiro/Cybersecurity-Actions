@@ -54,8 +54,8 @@ During the search for these tools, radon showed up as tool capable of calculatin
 ## Job description
 - Install [prospector](https://prospector.landscape.io/en/master/)
 - Install [radon](https://radon.readthedocs.io/en/latest/)
-- For all files changed, that end in .py, run both prospector and radon against them
-- If there are reports generated, upload them to GitHub using the [artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts) feature 
+- For all files to be analysed, that end in .py, run both prospector and radon against them
+- Move the reports to be upload to github
 
 
 ## Auxiliary scripts
@@ -65,8 +65,8 @@ Shell script that will:
 - Install both tools
 - Create a directory to store all files, either temporary of final reports
 - Remove the .py extension of all files
-- Run both tools against it and summarises the reports using the CodeReporting.py script
-- Flag if reports have been created using [github environment variables](https://docs.github.com/en/enterprise-cloud@latest/actions/learn-github-actions/environment-variables)
+- Run both tools against it and summarises the reports using the BadPracticesReporting.py script
+- Exit with 1 if issues are found, else exit with 0
 
 Note: The strategy used to make file paths was to replace all forward-slashes (/) by backwards-slashes (\\) which makes linux read this as a file path and not a full path, but when exporting as a zip, when decompressed it creates the full paths with all directories, making the appearance much better, a happy little coincidence.
 
