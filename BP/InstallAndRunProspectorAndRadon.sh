@@ -18,8 +18,6 @@ python3 -m pip install Jinja2
 python3 -m pip install radon
 python3 -m pip install prospector
 
-# Run propector and radon on a file passed as the first argument
-
 sufix=".py"
 empty=""
 
@@ -28,7 +26,7 @@ mkdir -p $dir
 
 ret=0
 
-
+# Run propector and radon on the files passed as arguments
 
 for file in $5; do
     if [[ $file =~ \.py$ ]]; then
@@ -37,11 +35,11 @@ for file in $5; do
         before=$file
         file=${file////\\}
         prosp_file=${file}_prospector.json
-        radon_file=${file}_radon.html
+        radon_file=${file}_radon.txt
         final_file=${file//$sufix/$empty}.html
 
 
-        # Run prospector and radon, compile results with the CodeReporting script, clean the files that are no longer useful
+        # Run prospector and radon, compile results with the BadPracticesReporting script, clean the files that are no longer useful
         if [ $2 != "" ] 
         then
             prospector $3 --profile $2 -0 "$before" > "$prosp_file"
@@ -55,7 +53,8 @@ for file in $5; do
         then
             ret=1
         fi
-        rm "$prosp_file" "$radon_file"
+        mv "$prosp_file" $dir
+        mv "$radon_file" $dir
     fi
 done
 
