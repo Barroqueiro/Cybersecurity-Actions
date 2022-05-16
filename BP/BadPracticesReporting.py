@@ -51,6 +51,7 @@ def make_radon(radon):
     for complexity in radon:
         complexity = complexity.replace("\n","")
         complexity_split = complexity.split(" ")[4:]
+        print(complexity_split)
         block = RADON_DICT[complexity_split[0]]
         line = complexity_split[1].split(":")[0]
         name = complexity_split[2]
