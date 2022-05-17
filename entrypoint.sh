@@ -239,6 +239,7 @@ for st in "${scan_type[@]}"; do
                 zapr=$?
             else if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT != "false" ] && [ $RUN_SCRIPT != "" ]
             then 
+                ./$RUN_SCRIPT
                 ASSETS=$ACTION_PATH/$st
                 $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
                 zapr=$?
