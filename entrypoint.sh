@@ -230,38 +230,41 @@ for st in "${scan_type[@]}"; do
     then
         if [ $ZAP_TARGET != "" ]
         then
+            VERIFY_FLAG=0
             if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ] && [ $RUN_SCRIPT != "" ]
             then
                 ./$BUILD_SCRIPT
                 ./$RUN_SCRIPT
-                ASSETS=$ACTION_PATH/$st
-                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
-                zapr=$?
+                VERIFY_FLAG=1
             fi
             if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT != "false" ] && [ $RUN_SCRIPT != "" ]
             then 
                 ./$RUN_SCRIPT
-                ASSETS=$ACTION_PATH/$st
-                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
-                zapr=$?
+                VERIFY_FLAG=1
             fi
             if [ $CONTAINER_RUNNING = "true" ]
             then
+                VERIFY_FLAG=1
+            fi
+            if [ $VERIFY_FLAG = 1 ]
+            then
                 ASSETS=$ACTION_PATH/$st
                 $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
-                zapr=$?
-            fi
-            if [ $zapr = 1 ]
-            then
-                if [ $ZS_ISBLOCKING = "true" ]
+                if [ $? = 1 ]
                 then
-                    echo "::error::Zap Scan found problems, check the artifacts for more information"
-                    ret=1
+                    if [ $ZS_ISBLOCKING = "true" ]
+                    then
+                        echo "::error::Zap Scan found problems, check the artifacts for more information"
+                        ret=1
+                    else
+                        echo "::notice::Zap Scan found problems but non blocking was active during this run"
+                    fi
                 else
-                    echo "::notice::Zap Scan found problems but non blocking was active during this run"
+                    echo "::notice::Zap Scan did not find any problems"
                 fi
             else
-                echo "::notice::Zap Scan did not find any problems"
+                echo "::error::Bad configuration, no container running or indication of one"
+                ret=1
             fi
         else
             echo "::error::For a Dynamic scan there needs to be a target passed as argument"

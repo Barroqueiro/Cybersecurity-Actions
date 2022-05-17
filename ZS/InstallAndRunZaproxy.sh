@@ -18,6 +18,8 @@ volume="zap/wrk/"
 
 mkdir -p $volume
 
+docker ps
+
 if [ $2 != "" ] 
 then
     docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
