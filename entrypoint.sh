@@ -70,8 +70,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
-  --image-built) IMAGE_BUILT="$2"; shift;shift;;
-  --container-running) CONTAINER_RUNNING="$2"; shift;shift;;
   --build-script) BUILD_SCRIPT="$2"; shift;shift;;
   --image-tag) IMAGE_TAG="$2"; shift;shift;;
   --run-script) RUN_SCRIPT="$2"; shift;shift;;
@@ -104,6 +102,19 @@ mkdir "Reports"
 ret=0
 
 IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
+
+# Setup
+
+if [ $BUILD_SCRIPT != "" ]
+then
+    ./$BUILD_SCRIPT
+fi
+
+if [ $RUN_SCRIPT != "" ]
+then
+    ./$RUN_SCRIPT
+fi
+
 
 for st in "${scan_type[@]}"; do
     if [ $st = "BP" ] 
@@ -168,13 +179,6 @@ for st in "${scan_type[@]}"; do
     then
         if [ $IMAGE_TAG != "" ]
         then
-            if [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ]
-            then
-                ./$BUILD_SCRIPT
-            else
-                echo "::error::For a Dockle type scan there needs to be a either a mention that the image is already built or a script to built it"
-                ret=1
-            fi
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG"
             if [ $? = 1 ]
@@ -199,13 +203,6 @@ for st in "${scan_type[@]}"; do
     then
         if [ $IMAGE_TAG != "" ]
         then
-            if [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ]
-            then
-                ./$BUILD_SCRIPT
-            else
-                echo "::error::For a Trivy type scan there needs to be a either a mention that the image is already built or a script to built it"
-                ret=1
-            fi
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG"
             if [ $? = 1 ]
@@ -230,41 +227,19 @@ for st in "${scan_type[@]}"; do
     then
         if [ $ZAP_TARGET != "" ]
         then
-            VERIFY_FLAG=0
-            if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ] && [ $RUN_SCRIPT != "" ]
+            ASSETS=$ACTION_PATH/$st
+            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
+            if [ $? = 1 ]
             then
-                ./$BUILD_SCRIPT
-                ./$RUN_SCRIPT
-                VERIFY_FLAG=1
-            fi
-            if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT != "false" ] && [ $RUN_SCRIPT != "" ]
-            then 
-                ./$RUN_SCRIPT
-                VERIFY_FLAG=1
-            fi
-            if [ $CONTAINER_RUNNING = "true" ]
-            then
-                VERIFY_FLAG=1
-            fi
-            if [ $VERIFY_FLAG = 1 ]
-            then
-                ASSETS=$ACTION_PATH/$st
-                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
-                if [ $? = 1 ]
+                if [ $ZS_ISBLOCKING = "true" ]
                 then
-                    if [ $ZS_ISBLOCKING = "true" ]
-                    then
-                        echo "::error::Zap Scan found problems, check the artifacts for more information"
-                        ret=1
-                    else
-                        echo "::notice::Zap Scan found problems but non blocking was active during this run"
-                    fi
+                    echo "::error::Zap Scan found problems, check the artifacts for more information"
+                    ret=1
                 else
-                    echo "::notice::Zap Scan did not find any problems"
+                    echo "::notice::Zap Scan found problems but non blocking was active during this run"
                 fi
             else
-                echo "::error::Bad configuration, no container running or indication of one"
-                ret=1
+                echo "::notice::Zap Scan did not find any problems"
             fi
         else
             echo "::error::For a Dynamic scan there needs to be a target passed as argument"
