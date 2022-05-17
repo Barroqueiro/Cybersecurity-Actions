@@ -234,16 +234,24 @@ for st in "${scan_type[@]}"; do
             then
                 ./$BUILD_SCRIPT
                 ./$RUN_SCRIPT
+                ASSETS=$ACTION_PATH/$st
+                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
+                zapr=$?
             else if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT != "false" ] && [ $RUN_SCRIPT != "" ]
             then 
-                ./$RUN_SCRIPT
+                ASSETS=$ACTION_PATH/$st
+                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
+                zapr=$?
+            else if [ $CONTAINER_RUNNING = "true" ]
+            then
+                ASSETS=$ACTION_PATH/$st
+                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
+                zapr=$?
             else
                 echo "::error::For a Dynamic type scan there needs to be a a running container, check your configurations"
                 ret=1
             fi
-            ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
-            if [ $? = 1 ]
+            if [ $zapr = 1 ]
             then
                 if [ $ZS_ISBLOCKING = "true" ]
                 then
