@@ -7,18 +7,61 @@ function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
   fi
-  echo "Usage: $0 [-l locust-file] [-i interface] [-h host] [-u users] [-s spawn-rate] [-r run-time] [-w number-of-wrokers]"
-  echo "  -l, --locust-file              The locust file"
-  echo "  -i, --interface                true if no interface"
-  echo "  -h, --host                     The host to swarm"
-  echo "  -u, --users                    Number max of users to spawn"
+  echo "Usage: $0 [--action-path action-repo-path] [--repo-name scan-repo] [--scan-type scan-type] [Optional parameters]"
+  echo "------------------------------------ Required ------------------------------------"
+  echo "                                                                    "
+  echo "  --action-path                  Full path to the action repository"
+  echo "  --repo-name                    Name of the repository to scan"
+  echo "  --scan-type                    Type of scan to make"
+  echo "                                                                    "
 
-  echo "  -s, --spawn-rate               How many users to spawn per second"
-  echo "  -r, --run-time                 Run for how much time"
-  echo "  -w, --number-of-workers        The locust file"
-  echo "  -n, --no_workers               Run the master without the workers"
+  echo "------------------------------- Container Scanning -------------------------------"
+  echo "                                                                    "
+  echo "  --build-script                 Script used to build the image"
+  echo "  --image-tag                    Tag resultant of the build script"
+  echo "  --run-script                   Script used to run the conatiner"
+  echo "  --zap-target                   Zap target to analyse"
+  echo "                                                                    "
+
+
+  echo "---------------------------------- Config files ----------------------------------"
+  echo "                                                                    "
+  echo "  --prosp-filepath               Path to the prospector profile"
+  echo "  --horusec-filepath             Path to the horusec config file"
+  echo "  --secrets-filepath             Path to the secrets to be ignored file"
+  echo "  --dockle-filepath              Path to the dockle vulns to be ignored"
+  echo "  --trivy-filepath               Path to the trivy vulns to be ignored"
+  echo "  --zap-filepath                 Path to the zap rules file"
+  echo "                                                                    "
+
+
+  echo "-------------------------- Tools Command line arguments --------------------------"
+  echo "                                                                    "
+  echo "  --prosp-cmd                    Other command line arguments for prospector"
+  echo "  --radon-cmd                    Other command line arguments for radon"
+  echo "  --horusec-cmd                  Other command line arguments for horusec"
+  echo "  --gitleaks-cmd                 Other command line arguments for gitleaks"
+  echo "  --dockle-cmd                   Other command line arguments for trivy"
+  echo "  --trivy-cmd                    Other command line arguments for trivy"
+  echo "  --zap-cmd                      Other command line arguments for zap"
+  echo "                                                                    "
+
+  echo "------------------------------------ Blocking ------------------------------------"
+  echo "                                                                    "
+  echo "  --bp-isblocking                Block the workflow on issues found in bp scan"
+  echo "  --vs-isblocking                Block the workflow on issues found in vs scan"
+  echo "  --ss-isblocking                Block the workflow on issues found in ss scan"
+  echo "  --ds-isblocking                Block the workflow on issues found in ds scan"
+  echo "  --ts-isblocking                Block the workflow on issues found in ts scan"
+  echo "  --zs-isblocking                Block the workflow on issues found in zs scan"
+  echo "                                                                    "
+
+  echo "--------------------------------- Other Arguments --------------------------------"
+  echo "                                                                    "
+  echo "  --files-toscan                 List of files to lint"
+  echo "                                                                    "
+
   echo ""
-  echo "Example: $0 -l locust_test.py -i false -h 'http://localhost:8080' -u 10000 -s 500 -r 1m -w 10"
   exit 1
 }
 
@@ -27,6 +70,8 @@ while [[ "$#" > 0 ]]; do case $1 in
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
+  --image-built) IMAGE_BUILT="$2"; shift;shift;;
+  --container-running) CONTAINER_RUNNING="$2"; shift;shift;;
   --build-script) BUILD_SCRIPT="$2"; shift;shift;;
   --image-tag) IMAGE_TAG="$2"; shift;shift;;
   --run-script) RUN_SCRIPT="$2"; shift;shift;;
@@ -121,9 +166,15 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "DS" ] 
     then
-        if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ]
+        if [ $IMAGE_TAG != "" ]
         then
-            ./$BUILD_SCRIPT
+            if [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ]
+            then
+                ./$BUILD_SCRIPT
+            else
+                echo "::error::For a Dockle type scan there needs to be a either a mention that the image is already built or a script to built it"
+                ret=1
+            fi
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG"
             if [ $? = 1 ]
@@ -139,16 +190,22 @@ for st in "${scan_type[@]}"; do
                 echo "::notice::Dockle Scan did not find any problems"
             fi
         else
-            echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"
+            echo "::error::For a Dockle type scan there needs to be a image tag passed as arguments"
             ret=1
         fi
     fi
 
     if [ $st = "TS" ] 
     then
-        if [ $BUILD_SCRIPT != "" ] && [ $IMAGE_TAG != "" ]
+        if [ $IMAGE_TAG != "" ]
         then
-            ./$BUILD_SCRIPT
+            if [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ]
+            then
+                ./$BUILD_SCRIPT
+            else
+                echo "::error::For a Trivy type scan there needs to be a either a mention that the image is already built or a script to built it"
+                ret=1
+            fi
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG"
             if [ $? = 1 ]
@@ -171,10 +228,19 @@ for st in "${scan_type[@]}"; do
 
     if [ $st = "ZS" ] 
     then
-        if [ $BUILD_SCRIPT != "" ] && [ $RUN_SCRIPT != "" ]
+        if [ $ZAP_TARGET != "" ]
         then
-            ./$BUILD_SCRIPT
-            ./$RUN_SCRIPT
+            if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT = "false" ] && [ $BUILD_SCRIPT != "" ] && [ $RUN_SCRIPT != "" ]
+            then
+                ./$BUILD_SCRIPT
+                ./$RUN_SCRIPT
+            else if [ $CONTAINER_RUNNING = "false" ] && [ $IMAGE_BUILT != "false" ] && [ $RUN_SCRIPT != "" ]
+            then 
+                ./$RUN_SCRIPT
+            else
+                echo "::error::For a Dynamic type scan there needs to be a a running container, check your configurations"
+                ret=1
+            fi
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
             if [ $? = 1 ]
@@ -190,7 +256,7 @@ for st in "${scan_type[@]}"; do
                 echo "::notice::Zap Scan did not find any problems"
             fi
         else
-            echo "::error::For a Dynamic scan there needs to be a build script,a image tag and a run script passed as arguments"
+            echo "::error::For a Dynamic scan there needs to be a target passed as argument"
             ret=1
         fi
     fi

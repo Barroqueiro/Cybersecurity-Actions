@@ -5,6 +5,12 @@ inputs:
   scan-type:
     descripton: 'Type of scan to run [ Container Scan (CS), Bad Practices (BP), Vulnerability Scan (VS), Secret Scan (SS) ]'
     required: true
+  image-built:
+    description: 'To disable checks and requirements from build scripts, signaling the action that the image is already created in the github worker'
+    default: 'false'
+  container-running:
+    description: 'To disable checks and requirements from run scripts, signaling the action that the container is already running in the github worker'
+    default: 'false'
   build-script: 
     description: 'Script used to build the image'
     default: ''
@@ -86,6 +92,8 @@ runs:
             --action-path "${{ github.action_path }}"
             --repo-name "${{ github.event.repository.name }}"
             --scan-type "${{ inputs.scan-type }}"
+            --image-built "${{ inputs.image-built }}"
+            --container-running "${{ inputs.container-running }}"
             --build-script "${{ inputs.build-script }}"
             --image-tag "${{ inputs.image-tag }}"
             --run-script "${{ inputs.run-script }}"
