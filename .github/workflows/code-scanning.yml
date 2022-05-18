@@ -15,10 +15,10 @@ jobs:
       - name: Get changed files using defaults
         id: changed-files
         uses: tj-actions/changed-files@v18.7
-      - uses: barroqueiro/Cybersecurity-Actions@v0.5.60
+      - uses: barroqueiro/Cybersecurity-Actions@v0.5.61
         with:
           scan-type: 'BP,VS,SS'
-          files-toscan: 'all'
+          files-toscan: '${{ steps.changed-files.outputs.all_changed_files }}'
           prosp-cmd: '-8'
           prosp-filepath: '.github/workflows/ConfigFiles/prospector_profile.yaml'
           radon-cmd: '-n B'
