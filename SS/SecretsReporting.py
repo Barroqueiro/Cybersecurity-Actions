@@ -50,7 +50,7 @@ def main():
     output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
     with open(sys.argv[4],"w") as f:
         f.write(output_from_parsed_template)
-    exit(ret)
+    sys.exit(ret)
 
 if __name__ == "__main__":
     main()

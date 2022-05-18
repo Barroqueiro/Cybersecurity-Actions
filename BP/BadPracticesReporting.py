@@ -29,7 +29,7 @@ RADON_LEGEND = """
 # Order the issues by line
 # Print the most important atributes by issue found
 def make_vulns(messages):
-    messages = sorted(messages,key=lambda messages:messages["location"]["line"] if messages["location"]["line"] != None else 0)
+    messages = sorted(messages,key=lambda messages:messages["location"]["line"] if messages["location"]["line"] is not None else 0)
     vulns = {"Issues":[]}
     ret = 0
     for msg in messages:
@@ -77,7 +77,7 @@ def main():
     output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_lengend=RADON_LEGEND,today=today,radon_colors=radon_colors)
     with open(sys.argv[4],"w") as f:
         f.write(output_from_parsed_template)
-    exit(ret)
+    sys.exit(ret)
 
 if __name__ == "__main__":
     main()

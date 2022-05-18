@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 # For each vulnerability get the most important details
 def make_vulns(vuln_list):
     vulns_by_severity = {"CRITICAL":[],"HIGH":[],"MEDIUM":[],"LOW":[],"UNKNOWN":[]}
-    if vuln_list == None:
+    if vuln_list is None:
         return vulns_by_severity
     for v in vuln_list:
         vuln = v["vulnerabilities"]
