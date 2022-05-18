@@ -15,7 +15,7 @@ jobs:
       - name: Get changed files using defaults
         id: changed-files
         uses: tj-actions/changed-files@v18.7
-      - uses: barroqueiro/Cybersecurity-Actions@v0.5.56
+      - uses: barroqueiro/Cybersecurity-Actions@v0.5.57
         with:
           scan-type: 'BP,VS,SS'
           files-toscan: 'all'

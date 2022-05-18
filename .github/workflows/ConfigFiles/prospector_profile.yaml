@@ -16,6 +16,7 @@ pycodestyle:
 pylint:
   disable:
     - bad-indentation
+    - unspecified-encoding
 
 
 mccabe:
