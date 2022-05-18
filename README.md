@@ -72,7 +72,7 @@ Using only the vulnerability scan:
 Path to a script used to build the docker image to analyse
 
     Name: build-script
-    Required: For any image related scan (DS,TS,ZS)
+    Required: False
     Default: ''
 
 
@@ -81,12 +81,12 @@ Path to a script used to build the docker image to analyse
 Path to a script used to locally run the instance to analyse
 
     Name: run-script
-    Required: For ZS type of scan
+    Required: False
     Default: ''
 
 #### **Image tag**
 
-To keep track of the images, this parameter keeps the tag on the image created
+To keep track of the images, this parameter keeps the [tag](https://docs.docker.com/engine/reference/commandline/tag/) on the image created
 
     Name: image-tag
     Required: TS,DS type of scan to pass which image they are analysing
@@ -106,6 +106,8 @@ Notes concerning Docker Related parameters:
         run-script: 'ActionFiles/run.sh'
 
 Use the scripts build.sh and run.sh in the ActionFiles folder of the repository to build and run the image. The image is tagged with: scan/scanimage:latest
+The image does not need to be ran during the custom action, it can be build in previous steps fully configurable within the workflow file. Just make sure there is an image to be scanned (DS,TS) or there is an instance to be analysed (ZS). 
+Since the build and run scripts are threated as setup options these will run before any scanning starts, having these scripts configured for scans that don't need them will create unecessary overhead.
 
 ### Bad Practices Related parameters
 

@@ -61,6 +61,10 @@ This script will:
 ## Ignoring secrets
 If at any point we get a false positive the SecretsReporting.py script will output a hash in every secret, taking that hash and adding it to the IgnoredSecrets.txt will make it so the next run wont block the workflow.
 
+## Fixing a secret found
+
+If any secrets are found during a scan, it is not enough to remove them from the file they were found in. Gitleaks scan the commit history so we also need to errase secrets from the repositories history. Follow [this guide](Fix.md) for more instructions
+
 ## Example output
 
 ![Gitleaks output](assets/GitleaksOutput.png)
