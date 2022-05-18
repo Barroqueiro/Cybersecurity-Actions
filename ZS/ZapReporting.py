@@ -60,7 +60,7 @@ def main():
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     sites = data["site"]
     vulns = make_vulns(sites)
-    env = Environment(loader=FileSystemLoader(sys.argv[2]),autoescape=True)
+    env = Environment(loader=FileSystemLoader(sys.argv[2]), autoescape=True)
     template = env.get_template('ZapTemplate.jinja2')
     colors = {"HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","INFORMATIONAL":"#53DAC1","IGNORED":"#50C878"}
     output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
