@@ -1,6 +1,9 @@
 name: Code Security checks
 
-on: [push]
+on:
+  create:
+    tags:
+      - '**'
 
 jobs:
   Code-Security-Checks:
@@ -12,10 +15,10 @@ jobs:
       - name: Get changed files using defaults
         id: changed-files
         uses: tj-actions/changed-files@v18.7
-      - uses: barroqueiro/Cybersecurity-Actions@v0.5.55
+      - uses: barroqueiro/Cybersecurity-Actions@v0.5.56
         with:
           scan-type: 'BP,VS,SS'
-          files-toscan: '${{ steps.changed-files.outputs.all_changed_files }}'
+          files-toscan: 'all'
           prosp-cmd: '-8'
           prosp-filepath: '.github/workflows/ConfigFiles/prospector_profile.yaml'
           radon-cmd: '-n B'
