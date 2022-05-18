@@ -401,5 +401,17 @@ Zap works the other way arround, it will not fail by deafult when finding issues
 
 ### Choices Made
 
-Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way (TODO)
+Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way (Dockle and Trivy scans were initially conceptualized as 1, container scanning, so their file is shared and stored withing the TS folder)
+
+### Jumps
+
+[Bad practices Documentation](BP/README.md)
+
+[Vulnerabilities Scan Documentation](VS/README.md)
+
+[Secrets Scan Documentation](SS/README.md)
+
+[Container Scan Documentation](TS/README.md)
+
+[Zap Scan Documentation](ZS/README.md)
 
