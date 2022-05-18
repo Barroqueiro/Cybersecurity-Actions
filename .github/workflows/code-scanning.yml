@@ -16,7 +16,7 @@ jobs:
         uses: tj-actions/changed-files@v18.7
       - name: Get latest version
         run: echo "ACTIONS_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-      - uses: barroqueiro/Cybersecurity-Actions@${{ env.ACTIONS_VERSION }}
+      - uses: barroqueiro/Cybersecurity-Actions@$ACTIONS_VERSION
         with:
           scan-type: 'BP,VS,SS'
           files-toscan: '${{ steps.changed-files.outputs.all_changed_files }}'
