@@ -14,17 +14,6 @@ RADON_DICT = {
     "C" : "Class"
 }
 
-# Provide a legend for clarification purposes
-RADON_LEGEND = """
-
-    A	low - simple block
-    B	low - well structured and stable block
-    C	moderate - slightly complex block
-    D	more than moderate - more complex block
-    E	high - complex block, alarming
-    F	very high - error-prone, unstable block
-
-"""
 
 # Order the issues by line
 # Print the most important atributes by issue found
@@ -76,7 +65,7 @@ def main():
     radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
     file_fullpath = sys.argv[4]
     filename = file_fullpath.split("/")[-1].replace(".html","").replace("\\","/") + ".py"
-    output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_legend=RADON_LEGEND,today=today,radon_colors=radon_colors,filename=filename)
+    output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,today=today,radon_colors=radon_colors,filename=filename)
     with open(file_fullpath,"w") as f:
         f.write(output_from_parsed_template)
     sys.exit(ret)

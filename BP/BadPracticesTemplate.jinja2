@@ -59,7 +59,39 @@
     </a>
     <div>&nbsp;</div>
     <div class="collapse" id="Radon">
-        <h2>{{ radon_legend }}</h2>
+        <table class="table sm-table table-bordered">
+            <thead style="background-color: #6AB4F1;text-align:center;">
+                 <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#radonlegend" role="button" aria-expanded="true" aria-controls="collapseExample" style="background-color: #6AB4F1;width: 100%;font-weight: bold;color:black;; border-color: black">
+                            Radon legend
+                        </a>
+            </thead>
+            <tbody class="collapse show" id="radonlegend">
+            <tr>
+                <td>A</td>
+                <td>low - simple block</td>
+            </tr>
+            <tr>
+                <td>B</td>
+                <td>low - well structured and stable block</td>
+            </tr>
+            <tr>
+                <td>C</td>
+                <td>moderate - slightly complex block</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>more than moderate - more complex block</td>
+            </tr>
+            <tr>
+                <td>E</td>
+                <td>high - complex block, alarming</td>
+            </tr>
+            <tr>
+                <td>F</td>
+                <td>very high - error-prone, unstable block</td>
+            </tr>
+            </tbody>
+        </table>
         <div class="container">
             {% for score in radon %}
                 {% if radon[score] != [] %}
