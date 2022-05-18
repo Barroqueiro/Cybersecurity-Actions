@@ -3,7 +3,6 @@
 import sys
 import json
 import hashlib
-import subprocess
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
@@ -45,7 +44,7 @@ def main():
         ig = ignore.read().split("\n")
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     secrets,ret = make_secrets(data,ig)
-    env = Environment(loader=FileSystemLoader(sys.argv[3]))
+    env = Environment(loader=FileSystemLoader(sys.argv[3]),autoescape=True)
     template = env.get_template('SecretsTemplate.jinja2')
     colors = {"SECRET":"#F3836B","ACCEPTED SECRET":"#50C878"}
     output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
