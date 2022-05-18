@@ -74,8 +74,10 @@ def main():
     env = Environment(loader=FileSystemLoader(sys.argv[3]),autoescape=True)
     template = env.get_template('BadPracticesTemplate.jinja2')
     radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
-    output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_lengend=RADON_LEGEND,today=today,radon_colors=radon_colors)
-    with open(sys.argv[4],"w") as f:
+    file_fullpath = sys.argv[4]
+    filename = file_fullpath.split("/")[-1].split("\\")[-1].replace(".html","")
+    output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,radon_lengend=RADON_LEGEND,today=today,radon_colors=radon_colors,filename=filename)
+    with open(file_fullpath,"w") as f:
         f.write(output_from_parsed_template)
     sys.exit(ret)
 
