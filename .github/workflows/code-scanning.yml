@@ -1,0 +1,26 @@
+name: Code Security checks
+
+on: [push]
+
+jobs:
+  Code-Security-Checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files using defaults
+        id: changed-files
+        uses: tj-actions/changed-files@v18.7
+      - uses: barroqueiro/Cybersecurity-Actions@v0.5.48
+        with:
+          scan-type: 'BP,VS,SS'
+          files-toscan: '${{ steps.changed-files.outputs.all_changed_files }}'
+          prosp-cmd: '-8'
+          prosp-filepath: '.github/workflows/ConfigFiles/prospector_profile.yaml'
+          radon-cmd: '-n B'
+          bp-isblocking: 'false'
+          horusec-filepath: '.github/workflows/ConfigFiles/horusec-config.json'
+          vs-isblocking: 'true'
+          secrets-filepath: '.github/workflows/ConfigFiles/.gitleaksignore'
+          ss-isblocking: 'true'

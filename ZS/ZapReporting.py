@@ -24,7 +24,7 @@ def make_vulns(sites):
             risk = a["riskdesc"].split(" ")
             severity = risk[0]
             confidence = risk[1].replace("(","")
-            confidence.replace(")","")
+            confidence = confidence.replace(")","")
             instances = a["instances"]
             solution = a["solution"]
             references = a["reference"].split("<p>")[1:]

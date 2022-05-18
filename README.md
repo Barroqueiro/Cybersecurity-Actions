@@ -397,7 +397,7 @@ Note: The file does need to be called .trivyignore
 
 #### **Zap Scan**
 
-Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already references above
+Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already referenced above
 
 ### Choices Made
 
