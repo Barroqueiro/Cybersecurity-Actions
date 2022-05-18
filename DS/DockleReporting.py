@@ -25,7 +25,7 @@ def main():
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     vuln_list= data["details"]
     vulns = make_vulns(vuln_list)
-    env = Environment(loader=FileSystemLoader(sys.argv[2]))
+    env = Environment(loader=FileSystemLoader(sys.argv[2]),autoescape=True)
     template = env.get_template('DockleTemplate.jinja2')
     colors = {"FATAL":"#F3836B","WARN":"#FFCD00","INFO":"#53DAC1"}
     output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
