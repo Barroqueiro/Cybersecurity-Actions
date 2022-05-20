@@ -12,16 +12,16 @@ from jinja2 import Environment, FileSystemLoader
 # If the secret is not to be ignored turn the return value to 1 to fail the pipeline and output it as a secret found
 # For either situation append the relavant information to be returnednd
 def make_secrets(secret_list,ignore):
-    secrets = {"SECRET":[],"ACCEPTED SECRET":[]}
+    secrets = {"SECRETS":[],"ACCEPTED SECRETS":[]}
     ret = 0
     for s in secret_list:
         date = s["Date"]
         del s["Date"]
         h = hashlib.sha256(str(s).encode()).hexdigest()
         if h in ignore:
-            status = "ACCEPTED SECRET"
+            status = "ACCEPTED SECRETS"
         else:
-            status = "SECRET"
+            status = "SECRETS"
             ret = 1
         description = s["Description"]
         match = s["Match"]
@@ -47,7 +47,7 @@ def main():
     secrets,ret = make_secrets(data,ig)
     env = Environment(loader=FileSystemLoader(sys.argv[3]),autoescape=True)
     template = env.get_template('SecretsTemplate.jinja2')
-    colors = {"SECRET":"#F3836B","ACCEPTED SECRET":"#50C878"}
+    colors = {"SECRETS":"#F3836B","ACCEPTED SECRETS":"#50C878"}
     output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
     with open(sys.argv[4],"w") as f:
         f.write(output_from_parsed_template)

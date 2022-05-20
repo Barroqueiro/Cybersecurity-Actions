@@ -28,7 +28,7 @@
           {% for key in site["vulns"] %}
             {% if site["vulns"][key] != [] %}
               <a class="btn btn-outline-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black; border-color: black">
-                {{ key }} Severity Vulnerabilities
+                  Found {{ len(vulns[key]) }} {{ key }} Severity Vulnerabilities
               </a> 
               <div>&nbsp;</div>
               <div class="collapse" id="{{key}}">
