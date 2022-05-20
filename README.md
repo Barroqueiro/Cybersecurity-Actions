@@ -25,7 +25,13 @@ This actions was constructed with the following objectives in mind:
 
 ## Usage
 
+For a specific version
+
     - uses: barroqueiro/Cybersecurity-Actions@<Version (v?.?.?)>
+
+To pull directly from main, may be unstable
+
+    - uses: barroqueiro/Cybersecurity-Actions@main
 
 ## Configurable options
 
