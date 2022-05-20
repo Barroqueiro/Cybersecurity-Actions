@@ -20,7 +20,7 @@
   <div class="container">
     {% if vulns["Issues"] != [] %}
         <a class="btn btn-primary btn-block" data-bs-toggle="collapse" href="#Prospector" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: #F1A36A;width: 100%;font-weight: bold;color:black;border-color: black">
-            Prospector Issues
+            Found {{ vulns["Issues"] | count }} Prospector Issues
         </a>
         <div>&nbsp;</div>
         <div class="collapse" id="Prospector">
