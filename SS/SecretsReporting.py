@@ -15,6 +15,7 @@ def make_secrets(secret_list,ignore):
     secrets = {"SECRET":[],"ACCEPTED SECRET":[]}
     ret = 0
     for s in secret_list:
+        date = s["Date"]
         del s["Date"]
         h = hashlib.sha256(str(s).encode()).hexdigest()
         if h in ignore:
@@ -29,7 +30,7 @@ def make_secrets(secret_list,ignore):
         line_end = s["EndLine"]
         commit = s["Commit"]
         Author = s["Email"]
-        secrets[status].append({"description":description,"match":match,"file":file,"line_start":line_start,"line_end":line_end,"commit":commit,"author":Author,"hash":h})
+        secrets[status].append({"description":description,"match":match,"file":file,"line_start":line_start,"line_end":line_end,"commit":commit,"author":Author,"hash":h,"date":date})
 
     return secrets,ret
 
