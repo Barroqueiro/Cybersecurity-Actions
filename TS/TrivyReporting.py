@@ -23,7 +23,7 @@ def make_vulns(vuln_list):
             installed_version = v["InstalledVersion"]
         else:
             installed_version = "NOT APPLICABLE"
-        if "FixesVersion" in v:
+        if "FixedVersion" in v:
             fixed_version = v["FixedVersion"]
         else:
             fixed_version = "STILL NO FIX"
