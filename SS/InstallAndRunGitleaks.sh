@@ -1,14 +1,22 @@
 #!/bin/bash
 
-# To help debugging
-set -x
-
 # Install, Run and Sumarise Gitleaks reporting
 #
 # $1 --> Full path inside github worker to the folder where this script resides
 # $2 --> Name of the repository we are analysing
 # $3 --> Aditional Gitleaks command line arguments
 # $4 --> Full path to the file containing the hases of secrets to ignore
+# $5 --> Debug mode
+
+DEBUG=$5
+
+# To help debugging
+if [ $DEBUG = "true" ]
+then
+    set -x
+    debug_dir="Reports/Debug/SecretScan"
+    mkdir -p $debug_dir
+fi
 
 # Directory configuration
 dir="Reports/SecretScan"
@@ -41,7 +49,10 @@ else
     ret=$?
 fi
 
-mv output.json SecretsReport.json
-mv SecretsReport.json $dir
+if [ $DEBUG = "true" ]
+then
+    mv output.json SecretsReport.json
+    mv SecretsReport.json $debug_dir
+fi
 
 exit $ret

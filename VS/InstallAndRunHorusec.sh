@@ -1,13 +1,21 @@
 #!/bin/bash
 
-# To help debugging
-set -x
-
 # Install, Run and Sumarise Horusec reporting
 #
 # $1 --> Full path inside github worker to the folder where this script resides
 # $2 --> Horusec config file path inside the scanned repository
 # $3 --> Aditional horusec command line arguments
+# $4 --> Debug mode
+
+DEBUG=$4
+
+# To help debugging
+if [ $DEBUG = "true" ]
+then
+    set -x
+    debug_dir="Reports/Debug/VulnerabilityScan"
+    mkdir -p $debug_dir
+fi
 
 # Directory configuration
 dir="Reports/VulnerabilityScan"
@@ -30,7 +38,11 @@ fi
 mkdir -p $dir
 python3 -m pip install Jinja2
 python3 $assets/HorusecReporting.py ./HorusecReport.json $assets $dir/HorusecReport.html
-mv ./HorusecReport.json $dir
+
+if [ $DEBUG = "true" ]
+then
+    mv ./HorusecReport.json $debug_dir
+fi
 
 # Return with the exit code related to how the horusec run went
 exit $ret

@@ -61,6 +61,7 @@ for file in $6; do
         then
             ret=1
         fi
+        
         if [ $DEBUG = "true" ]
         then
             mv "$prosp_file" $debug_dir
