@@ -86,6 +86,7 @@ runs:
     - name: Entrypoint
       run: >
             ${{ github.action_path }}/entrypoint.sh 
+            --debug "${{ github.debug }}"
             --action-path "${{ github.action_path }}"
             --repo-name "${{ github.event.repository.name }}"
             --scan-type "${{ inputs.scan-type }}"
