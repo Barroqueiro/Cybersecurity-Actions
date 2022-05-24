@@ -16,6 +16,7 @@ fi
 # $2 --> Prospector profile file path inside the scanned repository
 # $3 --> Aditional prospector command line arguments
 # $4 --> Aditional radon command line arguments
+# $5 --> Debug mode
 
 dir="Reports/BadPracticesScan"
 assets="$1"
@@ -60,7 +61,7 @@ for file in $6; do
         then
             ret=1
         fi
-        if [ $DEBUG = "true"]
+        if [ $DEBUG = "true" ]
         then
             mv "$prosp_file" $debug_dir
             mv "$radon_file" $debug_dir

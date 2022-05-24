@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# To help debugging
-set -x
-
 function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
@@ -98,6 +95,11 @@ while [[ "$#" > 0 ]]; do case $1 in
   --zs-isblocking) ZS_ISBLOCKING="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
+
+if [ $DEBUG = "true" ]
+then
+    set -x
+fi
 
 mkdir "Reports"
 
