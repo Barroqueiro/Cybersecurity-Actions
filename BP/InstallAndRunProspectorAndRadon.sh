@@ -3,7 +3,7 @@
 DEBUG=$5
 
 # To help debugging
-if [ $DEBUG = "true"]
+if [ $DEBUG = "true" ]
 then
     set -x
     debug_dir="Reports/Debug/BadPracticesScan"
