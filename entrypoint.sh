@@ -60,6 +60,7 @@ function usage() {
   echo "                                                                    "
   echo "  --files-toscan                 List of files to lint"
   echo "                                                                    "
+  echo "  --debug                        Get raw outputs from the tools ran "
 
   echo ""
   exit 1
@@ -67,6 +68,7 @@ function usage() {
 
 # parse params
 while [[ "$#" > 0 ]]; do case $1 in
+  --debug) DEBUG="$2"; shift;shift;;
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
@@ -124,7 +126,7 @@ for st in "${scan_type[@]}"; do
             FILES_TOSCAN=$(find . -type f | grep "^.*\.py$" | cut -c 3-)
         fi
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunProspectorAndRadon.sh "$ASSETS" "$PROSP_FILEPATH" "$PROSP_CMD" "$RADON_CMD" "$FILES_TOSCAN"
+        $ASSETS/InstallAndRunProspectorAndRadon.sh "$ASSETS" "$PROSP_FILEPATH" "$PROSP_CMD" "$RADON_CMD" "$DEBUG" "$FILES_TOSCAN"
         if [ $? = 1 ]
         then
             if [ $BP_ISBLOCKING = "true" ]
@@ -142,7 +144,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "VS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD"
+        $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD" "$DEBUG"
         if [ $? = 1 ]
         then
             if [ $VS_ISBLOCKING = "true" ]
@@ -160,7 +162,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "SS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" $SECRETS_FILEPATH
+        $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" "$SECRETS_FILEPATH" "$DEBUG"
         if [ $? = 1 ]
         then
             if [ $SS_ISBLOCKING = "true" ]
@@ -180,7 +182,7 @@ for st in "${scan_type[@]}"; do
         if [ $IMAGE_TAG != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG"
+            $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG" "$DEBUG"
             if [ $? = 1 ]
             then
                 if [ $DS_ISBLOCKING = "true" ]
@@ -204,7 +206,7 @@ for st in "${scan_type[@]}"; do
         if [ $IMAGE_TAG != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG"
+            $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG" "$DEBUG"
             if [ $? = 1 ]
             then
                 if [ $TS_ISBLOCKING = "true" ]
@@ -228,7 +230,7 @@ for st in "${scan_type[@]}"; do
         if [ $ZAP_TARGET != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET"
+            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET" "$DEBUG"
             if [ $? = 1 ]
             then
                 if [ $ZS_ISBLOCKING = "true" ]

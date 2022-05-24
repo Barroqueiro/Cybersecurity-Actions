@@ -2,6 +2,9 @@ name: 'Cybersecurity Actions'
 author: 'Dinis Cruz'
 description: 'Run a type of reporting on your repository'
 inputs:
+  debug:
+    descripton: 'Enable debugging: Getting shell scripts output and raw tools information'
+    default: 'false'
   scan-type:
     descripton: 'Type of scan to run [ Container Scan (CS), Bad Practices (BP), Vulnerability Scan (VS), Secret Scan (SS) ]'
     required: true

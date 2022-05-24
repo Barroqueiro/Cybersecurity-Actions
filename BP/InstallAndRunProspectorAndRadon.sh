@@ -1,7 +1,14 @@
 #!/bin/bash
 
+DEBUG=$5
+
 # To help debugging
-set -x
+if [ $DEBUG = "true"]
+then
+    set -x
+    debug_dir="Reports/Debug/BadPracticesScan"
+    mkdir -p $debug_dir
+fi
 
 # Install, Run and Sumarise Prospector and Radon reporting
 #
@@ -28,7 +35,7 @@ ret=0
 
 # Run propector and radon on the files passed as arguments
 
-for file in $5; do
+for file in $6; do
     if [[ $file =~ \.py$ ]]; then
 
         # Removing all / with \ to not cause problems with directory searching
@@ -53,8 +60,11 @@ for file in $5; do
         then
             ret=1
         fi
-        mv "$prosp_file" $dir
-        mv "$radon_file" $dir
+        if [ $DEBUG = "true"]
+        then
+            mv "$prosp_file" $debug_dir
+            mv "$radon_file" $debug_dir
+        fi
     fi
 done
 
