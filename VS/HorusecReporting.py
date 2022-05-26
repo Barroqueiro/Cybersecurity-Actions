@@ -8,7 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # For each vulnerability get the most important details
 def make_vulns(vuln_list):
-    vulns_by_severity = {"CRITICAL":[],"HIGH":[],"MEDIUM":[],"LOW":[],"UNKNOWN":[]}
+    vulns_by_severity = {"CRITICAL":{},"HIGH":{},"MEDIUM":{},"LOW":{},"UNKNOWN":{}}
     if vuln_list is None:
         return vulns_by_severity
     for v in vuln_list:
@@ -18,7 +18,10 @@ def make_vulns(vuln_list):
         severity = vuln["severity"]
         line = vuln["line"]
         details = vuln["details"]
-        vulns_by_severity[severity].append({"file":file,"line":line,"details":details,"hash":hash})
+        if details in vulns_by_severity[severity]:
+            vulns_by_severity[severity][details].append({"file":file,"line":line,"hash":hash})
+        else: 
+            vulns_by_severity[severity][details] = [{"file":file,"line":line,"hash":hash}]
     return vulns_by_severity
 
 # Read form the json horusec report
