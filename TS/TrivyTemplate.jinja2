@@ -16,7 +16,7 @@
   </div>
   <div class="container">
   {% for key in vulns %}
-      {% if vulns[key] != [] %}
+      {% if vulns[key] != {} %}
       <a class="btn btn-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black;border-color: black">
               Found {{ vulns[key] | count }} {{ key }} Severity Vulnerabilities
       </a>
@@ -30,20 +30,20 @@
               <tbody class="collapse show" id="{{ key }}Vulnerability{{ loop.index }}">
                 <tr>
                   <td>Title</td>
-                  <td>{{ vuln["title"] }}</td>
+                  <td>{{ vulns[key][vuln]["title"] }}</td>
                 </tr>
                 <tr>
                   <td>Package</td>
-                  <td>{{ vuln["pkg_name"] }}</td>
+                  <td>{{ ', '.join(vulns[key][vuln]["pkg_name"]) }}</td>
                 </tr>
                 <tr>
                   <td>ID</td>
-                  <td>{{ vuln["id"] }}</td>
+                  <td>{{ vulns[key][vuln]["id"] }}</td>
                 </tr>
                 <tr>
                   <td>URL</td>
                   <td>
-                    <a href="{{ vuln["vuln_url"] }}"> {{ vuln["vuln_url"] }} </a><br>
+                    <a href="{{ vuln['vuln_url'] }}"> {{ vulns[key][vuln]["vuln_url"] }} </a><br>
                   </td>
                 </tr>
                 <tr>
@@ -52,25 +52,25 @@
                 </tr>
                 <tr>
                   <td>Description</td>
-                  <td>{{ vuln["description"] }}</td>
+                  <td>{{ vulns[key][vuln]["description"] }}</td>
                 </tr>
                 <tr>
                   <td>Installed Version</td>
-                  <td>{{ vuln["installed_version"] }}</td>
+                  <td>{{ vulns[key][vuln]["installed_version"] }}</td>
                 </tr>
                 <tr>
                   <td>Fixed Version</td>
-                  <td>{{ vuln["fixed_version"] }}</td>
+                  <td>{{ vulns[key][vuln]["fixed_version"] }}</td>
                 </tr>
                 <tr>
                   <td>Average CVSS</td>
-                  <td>{{ vuln["cvss"] }}</td>
+                  <td>{{ vulns[key][vuln]["cvss"] }}</td>
                 </tr>
                 <tr>
                   <td>CWE's</td>
                   <td>
                   {% if cwe != [] %}
-                    {% for cwe in vuln["cwes"] %}
+                    {% for cwe in vulns[key][vuln]["cwes"] %}
                         <a href="https://cwe.mitre.org/data/definitions/{{ cwe }}.html"> CWE-{{ cwe }} </a><br>
                     {% endfor %}
                   {% endif %}

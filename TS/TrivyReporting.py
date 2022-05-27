@@ -8,9 +8,8 @@ from jinja2 import Environment, FileSystemLoader
 
 # For each vulnerability get the most important details and add default values if no value is found within the json
 def make_vulns(vuln_list):
-    vulns_by_severity = {"CRITICAL":[],"HIGH":[],"MEDIUM":[],"LOW":[],"UNKNOWN":[]}
+    vulns_by_severity = {"CRITICAL":{},"HIGH":{},"MEDIUM":{},"LOW":{},"UNKNOWN":{}}
     for v in vuln_list:
-        print()
         if "VulnerabilityID" in v:
             id = v["VulnerabilityID"]
         else:
@@ -59,8 +58,11 @@ def make_vulns(vuln_list):
             avg = round(sum_avg/count_avg,1)
         else:
             avg = "NOT KNOWN"
-
-        vulns_by_severity[severity].append({"id":id,"pkg_name":pkg_name,"installed_version":installed_version,"fixed_version":fixed_version,"vuln_url":vuln_url,"title":title,"description":description,"cwes":cwes,"cvss":avg})
+        if id in vulns_by_severity[severity]:
+            vulns_by_severity[severity][id]["pkg_name"].append(pkg_name)
+        else:
+            vulns_by_severity[severity][id] = {"id":id,"pkg_name":[pkg_name],"installed_version":installed_version,"fixed_version":fixed_version,"vuln_url":vuln_url,"title":title,"description":description,"cwes":cwes,"cvss":avg}
+    
     return vulns_by_severity
 
 
