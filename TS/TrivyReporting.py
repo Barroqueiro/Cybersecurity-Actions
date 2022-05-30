@@ -46,9 +46,9 @@ def make_vulns(vuln_list):
             cwes = [x.replace("CWE-","") for x in v["CweIDs"]]
         else:
             cwes = []
+        count_avg = 0
         if "CVSS" in v:
             cvss = v["CVSS"]
-            count_avg = 0
             sum_avg = 0
             for cv in cvss:
                 if "V3Score" in cvss[cv]:
