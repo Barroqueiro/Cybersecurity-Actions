@@ -62,7 +62,8 @@ def make_vulns(vuln_list):
             vulns_by_severity[severity][id]["pkg_name"].append(pkg_name)
         else:
             vulns_by_severity[severity][id] = {"id":id,"pkg_name":[pkg_name],"installed_version":installed_version,"fixed_version":fixed_version,"vuln_url":vuln_url,"title":title,"description":description,"cwes":cwes,"cvss":avg}
-    
+    for key in vulns_by_severity:
+        sorted(vulns_by_severity[key])
     return vulns_by_severity
 
 

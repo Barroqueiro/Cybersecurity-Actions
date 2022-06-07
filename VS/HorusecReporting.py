@@ -22,6 +22,8 @@ def make_vulns(vuln_list):
             vulns_by_severity[severity][details].append({"file":file,"line":line,"hash":hash})
         else: 
             vulns_by_severity[severity][details] = [{"file":file,"line":line,"hash":hash}]
+    for key in vulns_by_severity:
+        sorted(vulns_by_severity[key])
     return vulns_by_severity
 
 # Read form the json horusec report
