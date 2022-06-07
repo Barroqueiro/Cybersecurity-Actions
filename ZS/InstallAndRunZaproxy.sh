@@ -8,7 +8,7 @@
 # $4 --> Target to analyse
 # $5 --> Debug mode
 
-DEBUG=$4
+DEBUG=$5
 
 # To help debugging
 if [ $DEBUG = "true" ]

@@ -109,12 +109,12 @@ IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 
 # Setup
 
-if [ $BUILD_SCRIPT != "" ]
+if [ $BUILD_SCRIPT -ne "" ]
 then
     ./$BUILD_SCRIPT
 fi
 
-if [ $RUN_SCRIPT != "" ]
+if [ $RUN_SCRIPT -ne "" ]
 then
     ./$RUN_SCRIPT
 fi
