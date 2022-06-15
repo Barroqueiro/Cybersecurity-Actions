@@ -30,10 +30,10 @@ docker ps
 
 if [ $2 != "" ] 
 then
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3 --hook=/zap/auth_hook.py -z "auth.loginurl=http://localhost:8000/accounts/signin/ auth.username="admin" auth.password="emif""
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
     ret=$?
 else
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -J ZapReport.json $3 --hook=/zap/auth_hook.py -z "auth.loginurl=http://localhost:8000/accounts/signin/ auth.username="admin" auth.password="emif""
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -J ZapReport.json $3
     ret=$?
 fi
 
