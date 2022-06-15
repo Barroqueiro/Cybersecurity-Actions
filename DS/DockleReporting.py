@@ -2,6 +2,7 @@
 
 import sys
 import json
+import argparse
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
@@ -20,17 +21,40 @@ def make_vulns(vuln_list):
 # Read form the json dockle report
 # Call the make_vulns functions to create a list of vulnerabilities for jinja
 def main():
-    with open(sys.argv[1],"r",encoding="UTF-8") as dockle:
+    parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
+    parser.add_argument('--json', type=str,
+                        help='Json to analyse')
+    parser.add_argument('--current-path', type=str,
+                        help='Current path')
+    parser.add_argument('--output-styles', type=str,
+                        help='Output style')
+    parser.add_argument('--output', type=str,
+                        help='File to output the result')
+    args = parser.parse_args()
+    config = vars(args)
+
+    with open(config["json"],"r",encoding="UTF-8") as dockle:
         data = json.loads(dockle.read())
+
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     vuln_list= data["details"]
     vulns = make_vulns(vuln_list)
-    env = Environment(loader=FileSystemLoader(sys.argv[2]),autoescape=True)
-    template = env.get_template('DockleTemplate.jinja2')
-    colors = {"FATAL":"#F3836B","WARN":"#FFCD00","INFO":"#53DAC1"}
-    output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
-    with open(sys.argv[3],"w") as f:
-        f.write(output_from_parsed_template)
+
+    styles = config["output_styles"].split(",")
+    for s in styles:
+        if s == "HTML":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
+            template = env.get_template('DockleTemplateHTML.jinja2')
+            colors = {"FATAL":"#F3836B","WARN":"#FFCD00","INFO":"#53DAC1"}
+            output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
+            with open(config["output"]+".html","w") as f:
+                f.write(output_from_parsed_template)
+        if s == "MD":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
+            template = env.get_template('DockleTemplateMD.jinja2')
+            output_from_parsed_template = template.render(vulns=vulns)
+            with open(config["output"]+".md","w") as f:
+                f.write(output_from_parsed_template)
 
 if __name__ == "__main__":
     main()

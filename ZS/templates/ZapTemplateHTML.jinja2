@@ -113,7 +113,7 @@
                               <td>References</td>
                               <td>
                               {% for reference in vuln["references"][1:] %}
-                                  <a href="{{ reference }}.html">{{ reference }} </a>
+                                  <a href="{{ reference.replace('<p>','').replace('</p>','') }}.html">{{ reference.replace("<p>",'').replace("</p>",'') }} </a>
                               {% endfor %}
                               </td>
                             </tr>

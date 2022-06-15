@@ -3,6 +3,7 @@
 import sys
 import json
 import hashlib
+import argparse
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
@@ -39,18 +40,45 @@ def make_secrets(secret_list,ignore):
 # Pass these informations to the make_secrets function
 # Return 1 if a secret not ignored is found
 def main():
-    with open(sys.argv[1],"r", encoding="UTF-8") as secrets:
+    parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
+    parser.add_argument('--json', type=str,
+                        help='Json to analyse')
+    parser.add_argument('--current-path', type=str,
+                        help='Current path')
+    parser.add_argument('--output-styles', type=str,
+                        help='Output style')
+    parser.add_argument('--output', type=str,
+                        help='File to output the result')
+    parser.add_argument('--ignore', type=str,
+                        help='Secrets to ignore')       
+    args = parser.parse_args()
+    config = vars(args)
+
+    with open(config["json"],"r", encoding="UTF-8") as secrets:
         data = json.loads(secrets.read())
-    with open(sys.argv[2],"r", encoding="UTF-8") as ignore:
+
+    with open(config["ignore"],"r", encoding="UTF-8") as ignore:
         ig = ignore.read().split("\n")
+
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     secrets,ret = make_secrets(data,ig)
-    env = Environment(loader=FileSystemLoader(sys.argv[3]),autoescape=True)
-    template = env.get_template('SecretsTemplate.jinja2')
-    colors = {"SECRETS":"#F3836B","ACCEPTED SECRETS":"#50C878"}
-    output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
-    with open(sys.argv[4],"w") as f:
-        f.write(output_from_parsed_template)
+
+    styles = config["output_styles"].split(",")
+    for s in styles:
+        if s == "HTML":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
+            template = env.get_template('SecretsTemplateHTML.jinja2')
+            colors = {"SECRETS":"#F3836B","ACCEPTED SECRETS":"#50C878"}
+            output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
+            with open(config["output"]+".html","w") as f:
+                f.write(output_from_parsed_template)
+        if s == "MD":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"))
+            template = env.get_template('SecretsTemplateMD.jinja2')
+            output_from_parsed_template = template.render(secrets=secrets)
+            with open(config["output"]+".md","w") as f:
+                f.write(output_from_parsed_template)
+    
     sys.exit(ret)
 
 if __name__ == "__main__":

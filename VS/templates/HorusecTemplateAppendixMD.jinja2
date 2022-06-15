@@ -1,0 +1,14 @@
+{% for key in vulns %}
+{% if vulns[key] != {} %}
+
+# {{ key }}
+{% for vuln in vulns[key] %}
+
+## {{ key }} Vulnerability {{ loop.index }} instances
+
+{% for instance in vulns[key][vuln] %}
+{{ instance["file"] }} at line {{ instance["line"] }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% endfor %}
