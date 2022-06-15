@@ -1,7 +1,6 @@
 # Script developed to sumarize a horusec json report and output results into a html file
 
 import sys
-import os
 import json
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader

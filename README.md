@@ -328,6 +328,14 @@ These are true by default but if anything different than the string 'true' is pa
 
     ss-isblocking: 'false'
 
+### Debug
+
+    Name: debug
+    Required: False
+    Default: 'false'
+
+If debug is set to `true`, debug files (jsons directly from each tool) will be included within the artifacts
+
 ### Anotations that can be found
 
 #### **Error Messages**
@@ -350,23 +358,32 @@ Message indication some scan found problems but non blocking was active
 
 Always a structure like the one bellow
 
+    Reports
     ├── BadPracticesScan
-    │   └── Directories of the original repository
+    │   └── Directories of the original repository with html files
     ├── DockleScan
-    │   ├── DockleReport.html
-    │   └── DockleReport.json
+    │   └── DockleReport.html
     ├── SecretScan
-    │   ├── SecretsReport.html
-    │   └── SecretsReport.json
+    │   └── SecretsReport.html
     ├── TrivyScan
-    │   ├── TrivyReport.html
-    │   └── TrivyReport.json
+    │   └── TrivyReport.html
     ├── VulnerabilityScan
-    │   ├── HorusecReport.html
-    │   └── HorusecReport.json
-    └── ZapScan
-        ├── ZapReport.html
-        └── ZapReport.json
+    │   └── HorusecReport.html
+    ├── ZapScan
+    │    └── ZapReport.html
+    └── Debug
+        ├── BadPracticesScan
+        │   └── Directories of the original repository with json and txt files
+        ├── DockleScan
+        │   └── DockleReport.json
+        ├── SecretScan
+        │   └── SecretsReport.json
+        ├── TrivyScan
+        │   └── TrivyReport.json
+        ├── VulnerabilityScan
+        │   └── HorusecReport.json
+        └── ZapScan
+            └── ZapReport.json
 
 ### Ignoring vulnerabilities
 
