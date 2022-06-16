@@ -5,7 +5,7 @@ inputs:
   debug:
     descripton: 'Enable debugging: Getting shell scripts output and raw tools information'
     default: 'false'
-  output-syle:
+  output-styles:
     descripton: 'Enable debugging: Getting shell scripts output and raw tools information'
     default: 'HTML'
   scan-type:
@@ -90,7 +90,7 @@ runs:
       run: >
             ${{ github.action_path }}/entrypoint.sh 
             --debug "${{ inputs.debug }}"
-            --output-style "${{ inputs.output-style }}"
+            --output-styles "${{ inputs.output-styles }}"
             --action-path "${{ github.action_path }}"
             --repo-name "${{ github.event.repository.name }}"
             --scan-type "${{ inputs.scan-type }}"
