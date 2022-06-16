@@ -66,6 +66,7 @@ function usage() {
 # parse params
 while [[ "$#" > 0 ]]; do case $1 in
   --debug) DEBUG="$2"; shift;shift;;
+  --output-style) OUTPUT_STYLE="$2"; shift;shift;;
   --action-path) ACTION_PATH="$2"; shift;shift;;
   --repo-name) REPO_NAME="$2"; shift;shift;;
   --scan-type) SCAN_TYPE="$2"; shift;shift;;
@@ -146,7 +147,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "VS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD" "$DEBUG"
+        $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD" "$DEBUG" "$OUTPUT_STYLE"
         if [ $? = 1 ]
         then
             if [ $VS_ISBLOCKING = "true" ]
@@ -164,7 +165,7 @@ for st in "${scan_type[@]}"; do
     if [ $st = "SS" ] 
     then
         ASSETS=$ACTION_PATH/$st
-        $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" "$SECRETS_FILEPATH" "$DEBUG"
+        $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" "$SECRETS_FILEPATH" "$DEBUG" "$OUTPUT_STYLE"
         if [ $? = 1 ]
         then
             if [ $SS_ISBLOCKING = "true" ]
@@ -184,7 +185,7 @@ for st in "${scan_type[@]}"; do
         if [ $IMAGE_TAG != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG" "$DEBUG"
+            $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLE"
             if [ $? = 1 ]
             then
                 if [ $DS_ISBLOCKING = "true" ]
@@ -208,7 +209,7 @@ for st in "${scan_type[@]}"; do
         if [ $IMAGE_TAG != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG" "$DEBUG"
+            $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLE"
             if [ $? = 1 ]
             then
                 if [ $TS_ISBLOCKING = "true" ]
@@ -232,7 +233,7 @@ for st in "${scan_type[@]}"; do
         if [ $ZAP_TARGET != "" ]
         then
             ASSETS=$ACTION_PATH/$st
-            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET" "$DEBUG"
+            $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET" "$DEBUG" "$OUTPUT_STYLE"
             if [ $? = 1 ]
             then
                 if [ $ZS_ISBLOCKING = "true" ]

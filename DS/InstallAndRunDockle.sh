@@ -5,8 +5,11 @@
 # $3 --> Aditional Dockle command line arguments
 # $4 --> Image tag to scan
 # $5 --> debug mode
+# $6 --> output style
 
 DEBUG=$5
+
+OUTPUT_STYLE=$5
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -41,7 +44,7 @@ ret=$?
 # Sumarize reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/DockleReporting.py DockleReport.json $assets $dir/DockleReport.html
+python3 $assets/DockleReporting.py --json DockleReport.json --current-path $assets --output $dir/DockleReport --output-styles "$OUTPUT_STYLE"
 if [ $DEBUG = "true" ]
 then
     mv DockleReport.json $debug_dir

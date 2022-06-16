@@ -5,8 +5,10 @@
 # $3 --> Aditional Trivy command line arguments
 # $4 --> Image tag to scan
 # $5 --> Debug mode
+# $6 --> Output style
 
 DEBUG=$5
+OUTPUT_STYLE=$6
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -35,7 +37,7 @@ ret=$?
 # Sumarize the reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/TrivyReporting.py TrivyReport.json $assets $dir/TrivyReport.html
+python3 $assets/TrivyReporting.py --json TrivyReport.json --current-path $assets --output $dir/TrivyReport --output-styles "$OUTPUT_STYLE"
 
 if [ $DEBUG = "true" ]
 then

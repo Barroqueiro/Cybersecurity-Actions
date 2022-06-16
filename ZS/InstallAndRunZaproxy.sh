@@ -7,8 +7,10 @@
 # $3 --> Aditional Zap command line arguments
 # $4 --> Target to analyse
 # $5 --> Debug mode
+# $6 --> Output style
 
 DEBUG=$5
+OUTPUT_STYLE=$6
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -39,7 +41,7 @@ fi
 
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/ZapReporting.py ZapReport.json $assets $dir/ZapReport.html
+python3 $assets/ZapReporting.py --json ZapReport.json --current-path $assets --output $dir/ZapReport --output-styles "$OUTPUT_STYLE"
 
 if [ $DEBUG = "true" ]
 then

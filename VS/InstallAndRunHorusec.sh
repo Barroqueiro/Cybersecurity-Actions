@@ -8,6 +8,7 @@
 # $4 --> Debug mode
 
 DEBUG=$4
+OUTPUT_STYLE=$5
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -37,7 +38,7 @@ fi
 # Sumarise reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/HorusecReporting.py ./HorusecReport.json $assets $dir/HorusecReport.html
+python3 $assets/HorusecReporting.py --json ./HorusecReport.json --current-path $assets --output $dir/HorusecReport --output-styles "$OUTPUT_STYLE"
 
 if [ $DEBUG = "true" ]
 then

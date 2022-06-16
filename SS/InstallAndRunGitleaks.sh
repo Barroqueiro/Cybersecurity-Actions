@@ -7,8 +7,10 @@
 # $3 --> Aditional Gitleaks command line arguments
 # $4 --> Full path to the file containing the hases of secrets to ignore
 # $5 --> Debug mode
+# $6 --> Output Style
 
 DEBUG=$5
+OUTPUT_STYLE=$6
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -41,11 +43,11 @@ cd ../$2
 # Run Gitleaks
 if [ $4 != "" ] 
 then
-    python3 $assets/SecretsReporting.py output.json $4 $1 $dir/SecretsReport.html
+    python3 $assets/SecretsReporting.py --json output.json --ignore $4 --current-path $1 --output $dir/SecretsReport --output-styles "$OUTPUT_STYLE"
     ret=$?
 else
     touch .ignoresecrets
-    python3 $assets/SecretsReporting.py output.json .ignoresecrets $1 $dir/SecretsReport.html
+    python3 $assets/SecretsReporting.py --json output.json --ignore .ignoresecrets --current-path $1 --output $dir/SecretsReport --output-styles "$OUTPUT_STYLE"
     ret=$?
 fi
 
