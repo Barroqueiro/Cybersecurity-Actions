@@ -9,7 +9,7 @@
 
 DEBUG=$5
 
-OUTPUT_STYLE=$5
+OUTPUT_STYLE=$6
 
 # To help debugging
 if [ $DEBUG = "true" ]
