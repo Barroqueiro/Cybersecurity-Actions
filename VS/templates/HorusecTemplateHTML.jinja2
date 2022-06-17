@@ -34,13 +34,13 @@
                         <tr>
                           <td colspan="2" style="text-align:center"><b>Instances</b></td>
                         </tr>
-                        {% for instance in vulns[key][vuln] %}
+                        {% for instance in vulns[key][vuln]["list_instances"] %}
                           <tr>
                             <td colspan="2">
                               <table class="table table-bordered table-hover" >
                                 <tr>
                                   <td>Location</td>
-                                  <td>{{ instance["file"] }} at line {{ instance["line"] }}</td>
+                                  <td>{{ instance["location"] }}</td>
                                 </tr>
                                 <tr>
                                   <td>Hash</td>

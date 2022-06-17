@@ -1,6 +1,8 @@
 # Script developed to sumarize a horusec json report and output results into a html file
 
 import sys
+sys.path.insert(0, '../common')
+from tree import start
 import json
 import argparse
 from datetime import datetime
@@ -13,15 +15,21 @@ def make_vulns(vuln_list):
         return vulns_by_severity
     for v in vuln_list:
         vuln = v["vulnerabilities"]
-        file = vuln["file"]
+        location = vuln["file"] + " at line " + vuln["line"]
         hash = vuln["vulnHash"]
         severity = vuln["severity"]
-        line = vuln["line"]
         details = vuln["details"].replace("* Possible vulnerability detected: ","\n\n")
         if details in vulns_by_severity[severity]:
-            vulns_by_severity[severity][details].append({"file":file,"line":line,"hash":hash})
+            vulns_by_severity[severity][details]["list_instances"].append({"location":location,"hash":hash})
         else: 
-            vulns_by_severity[severity][details] = [{"file":file,"line":line,"hash":hash}]
+            vulns_by_severity[severity][details] = {"list_instances":[{"location":location,"hash":hash}]}
+    l = []
+    for key in vulns_by_severity:
+        for k in vulns_by_severity[key]:
+            l = []
+            for instance in vulns_by_severity[key][k]["list_instances"]:
+                l.append(instance["location"])
+            vulns_by_severity[key][k]["tree"] = start(l)
     for key in vulns_by_severity:
         sorted(vulns_by_severity[key])
     return vulns_by_severity

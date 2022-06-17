@@ -2,7 +2,7 @@
 {% for key in site["vulns"] %}
 {% if site["vulns"][key] != [] %}
 {% for vuln in site["vulns"][key] %}
-## {{ vuln["name"].replace("-"," ") }} instances
+## {{ vuln["name"].replace(" - ").replace("-"," ") }} instances
 
 ### Instances
 {% for instance in vuln["instances"] %}

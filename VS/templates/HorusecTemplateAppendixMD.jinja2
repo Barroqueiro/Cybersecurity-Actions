@@ -6,9 +6,9 @@
 
 ## {{ key }} Vulnerability {{ loop.index }} instances
 
-{% for instance in vulns[key][vuln] %}
-{{ instance["file"] }} at line {{ instance["line"] }}
-{% endfor %}
+```
+{{ vulns[key][vuln]["tree"] }} 
+```
 {% endfor %}
 {% endif %}
 {% endfor %}

@@ -1,6 +1,8 @@
 # Script developed to sumarize a Gitleaks json report and output results into a html file
 
 import sys
+sys.path.insert(0, '../common')
+from tree import start
 import json
 import hashlib
 import argparse
@@ -26,12 +28,10 @@ def make_secrets(secret_list,ignore):
             ret = 1
         description = s["Description"]
         match = s["Match"]
-        file = s["File"]
-        line_start = s["StartLine"]
-        line_end = s["EndLine"]
+        location = s["File"] + " from line " + str(s["StartLine"]) + " to line " + str(s["EndLine"])
         commit = s["Commit"]
         Author = s["Email"]
-        secrets[status].append({"description":description,"match":match,"file":file,"line_start":line_start,"line_end":line_end,"commit":commit,"author":Author,"hash":h,"date":date})
+        secrets[status].append({"description":description,"match":match,"location":start([location]),"commit":commit,"author":Author,"hash":h,"date":date})
 
     return secrets,ret
 
