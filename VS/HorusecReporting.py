@@ -1,8 +1,7 @@
 # Script developed to sumarize a horusec json report and output results into a html file
 
 import sys
-sys.path.insert(0, '../common')
-from tree import start
+from modules.tree import start
 import json
 import argparse
 from datetime import datetime

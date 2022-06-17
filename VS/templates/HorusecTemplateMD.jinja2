@@ -4,7 +4,7 @@
 # {{ key }}
 {% for vuln in vulns[key] %}
 ## {{ key.lower().capitalize() }} Vulnerability {{ loop.index }}
-{{ vuln.replace("##","###").replace("```","\n```").replace("$","```$```").replace("\\","```\\```") }}
+{{ vuln.replace("##","###").replace("```","\n```").replace("$","```$```").replace("\\","```\\```").replace("Cwe Links","\nCwe Links").replace("\nPrimaryURL") }}
 
 ## Instances
 
