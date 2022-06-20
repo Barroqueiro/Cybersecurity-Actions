@@ -45,17 +45,30 @@ curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scri
 # Run horusec
 if [ $CONFIG != "" ] 
 then
-    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" --config-file-path $CONFIG $CMD
+    horusec start \
+                -p="./" \
+                -e="true" \
+                -o="json" \
+                -O="./HorusecReport.json" \
+                --config-file-path $CONFIG $CMD
     RET=$?
 else
-    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" $CMD
+    horusec start \
+                -p="./" \
+                -e="true" \
+                -o="json" \
+                -O="./HorusecReport.json" $CMD
     RET=$?
 fi
 
 # Sumarise reports
 mkdir -p $DIR
 python3 -m pip install Jinja2
-python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $DIR/HorusecReport --output-styles "$OUTPUT_STYLES"
+python3 $ASSETS/HorusecReporting.py \
+                        --json ./HorusecReport.json \
+                        --current-path $ASSETS \
+                        --output $DIR/HorusecReport \
+                        --output-styles "$OUTPUT_STYLES"
 
 if [ $DEBUG = "true" ]
 then

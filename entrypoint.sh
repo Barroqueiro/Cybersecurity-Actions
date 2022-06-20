@@ -161,7 +161,12 @@ for ST in "${scan_type[@]}"; do
         ;;
 
         SS)
-            $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" "$SECRETS_FILEPATH" "$DEBUG" "$OUTPUT_STYLES"
+            $ASSETS/InstallAndRunGitleaks.sh \
+                        --repo "$REPO_NAME" \
+                        --config "$SECRETS_FILEPATH" \
+                        --cmd "$GITLEAKS_CMD" \
+                        --debug "$DEBUG" \
+                        --output-styles "$OUTPUT_STYLES"
             message $? $SS_ISBLOCKING "Secrets Scan"
         ;;
 

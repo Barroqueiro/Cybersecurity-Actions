@@ -9,21 +9,45 @@
 # $5 --> Debug mode
 # $6 --> Output Style
 
-DEBUG=$5
-OUTPUT_STYLE=$6
+function usage() {
+    if [ -n "$1" ]; then
+        echo -e "--> $1\n";
+    fi
+    echo "Usage: $0 [--debug] [--config] [--cmd] [--output-styles]"
+    echo "------------------------------------ Required ------------------------------------"
+    echo "                                                                    "
+    echo "  --debug                        Is debug active"
+    echo "  --config                       Config file for Secrets"
+    echo "  --cmd                          Command line arguments for GitLeaks"
+    echo "  --repo                         Name of the repository"
+    echo "  --output-styles                Output styles requested"
+    echo ""
+    exit 1
+}
+
+# Parse params
+while [[ "$#" > 0 ]]; do case $1 in
+  --debug) DEBUG="$2"; shift;shift;;
+  --config) CONFIG="$2"; shift;shift;;
+  --cmd) CMD="$2"; shift;shift;;
+  --repo) REPO="$2"; shift;shift;;
+  --output-styles) OUTPUT_STYLES="$2"; shift;shift;;
+  *) usage "Unknown parameter passed: $1"; shift; shift;;
+esac; done
+
+ASSETS=$(dirname -- "$0")
 
 # To help debugging
 if [ $DEBUG = "true" ]
 then
     set -x
-    debug_dir="Reports/Debug/SecretScan"
-    mkdir -p $debug_dir
+    DEBUG_DIR="Reports/Debug/SecretScan"
+    mkdir -p $DEBUG_DIR
 fi
 
 # Directory configuration
-dir="Reports/SecretScan"
-assets="$1"
-mkdir -p $dir
+DIR="Reports/SecretScan"
+mkdir -p $DIR
 
 # Get outside the repository 
 cd ..
@@ -36,25 +60,37 @@ cd gitleaks
 make build
 
 # Return to the repository to analise and do so outputting the result in json
-cd ../$2
-../gitleaks/gitleaks detect --report-format json --report-path output.json $3
+cd ../$REPO
+../gitleaks/gitleaks detect 
+                    --report-format json \
+                    --report-path output.json $CMD
 
 
 # Run Gitleaks
 if [ $4 != "" ] 
 then
-    python3 $assets/SecretsReporting.py --json output.json --ignore $4 --current-path $1 --output $dir/SecretsReport --output-styles "$OUTPUT_STYLE"
-    ret=$?
+    python3 $ASSETS/SecretsReporting.py \
+                            --json output.json \
+                            --ignore $CONFIG \
+                            --current-path $ASSETS \
+                            --output $DIR/SecretsReport \
+                            --output-styles "$OUTPUT_STYLES"
+    RET=$?
 else
     touch .ignoresecrets
-    python3 $assets/SecretsReporting.py --json output.json --ignore .ignoresecrets --current-path $1 --output $dir/SecretsReport --output-styles "$OUTPUT_STYLE"
-    ret=$?
+    python3 $ASSETS/SecretsReporting.py \
+                            --json output.json \
+                            --ignore .ignoresecrets \
+                            --current-path $ASSETS \
+                            --output $DIR/SecretsReport \
+                            --output-styles "$OUTPUT_STYLES"
+    RET=$?
 fi
 
 if [ $DEBUG = "true" ]
 then
     mv output.json SecretsReport.json
-    mv SecretsReport.json $debug_dir
+    mv SecretsReport.json $DEBUG_DIR
 fi
 
-exit $ret
+exit $RET
