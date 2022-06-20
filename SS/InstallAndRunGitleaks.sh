@@ -61,13 +61,13 @@ make build
 
 # Return to the repository to analise and do so outputting the result in json
 cd ../$REPO
-../gitleaks/gitleaks detect 
+../gitleaks/gitleaks detect \
                     --report-format json \
                     --report-path output.json $CMD
 
 
 # Run Gitleaks
-if [ $4 != "" ] 
+if [ $CONFIG != "" ] 
 then
     python3 $ASSETS/SecretsReporting.py \
                             --json output.json \
