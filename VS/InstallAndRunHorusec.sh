@@ -1,50 +1,67 @@
 #!/bin/bash
 
 # Install, Run and Sumarise Horusec reporting
-#
-# $1 --> Full path inside github worker to the folder where this script resides
-# $2 --> Horusec config file path inside the scanned repository
-# $3 --> Aditional horusec command line arguments
-# $4 --> Debug mode
 
-DEBUG=$4
-OUTPUT_STYLE=$5
+function usage() {
+    if [ -n "$1" ]; then
+        echo -e "--> $1\n";
+    fi
+    echo "Usage: $0 [--debug] [--config] [--cmd] [--output-styles]"
+    echo "------------------------------------ Required ------------------------------------"
+    echo "                                                                    "
+    echo "  --debug                        Is debug active"
+    echo "  --config                       Config file for Horusec"
+    echo "  --cmd                          Command line arguments for Horusec"
+    echo "  --output-styles                Output styles requested"
+    echo ""
+    exit 1
+}
+
+# Parse params
+while [[ "$#" > 0 ]]; do case $1 in
+  --debug) DEBUG="$2"; shift;shift;;
+  --config) CONFIG="$2"; shift;shift;;
+  --cmd) CMD="$2"; shift;shift;;
+  --output-styles) OUTPUT_STYLES="$2"; shift;shift;;
+  *) usage "Unknown parameter passed: $1"; shift; shift;;
+esac; done
+
 ASSETS=$(dirname -- "$0")
 
 # To help debugging
 if [ $DEBUG = "true" ]
 then
     set -x
-    debug_dir="Reports/Debug/VulnerabilityScan"
-    mkdir -p $debug_dir
+    DEBUG_DIR="Reports/Debug/VulnerabilityScan"
+    mkdir -p $DEBUG_DIR
 fi
 
 # Directory configuration
-dir="Reports/VulnerabilityScan"
+DIR="Reports/VulnerabilityScan"
 ASSETS="$1"
 
 # Install horusec
 curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
 
 # Run horusec
-if [ $2 != "" ] 
+if [ $CONFIG != "" ] 
 then
-    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" --config-file-path $2 $3
-    ret=$?
+    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" --config-file-path $CONFIG $CMD
+    RET=$?
 else
-    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" $3
-    ret=$?
+    horusec start -p="./" -e="true" -o="json" -O="./HorusecReport.json" $CMD
+    RET=$?
 fi
 
 # Sumarise reports
-mkdir -p $dir
+mkdir -p $DIR
 python3 -m pip install Jinja2
-python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $dir/HorusecReport --output-styles "$OUTPUT_STYLE"
+python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $DIR/HorusecReport --output-styles "$OUTPUT_STYLE"
 
 if [ $DEBUG = "true" ]
 then
-    mv ./HorusecReport.json $debug_dir
+    mv ./HorusecReport.json $DEBUG_DIR
 fi
 
 # Return with the exit code related to how the horusec run went
-exit $ret
+exit $RET

@@ -7,7 +7,7 @@
 # $3 --> Aditional Zap command line arguments
 # $4 --> Target to analyse
 # $5 --> Debug mode
-# $6 --> Output style
+# $6 -->
 
 DEBUG=$5
 OUTPUT_STYLE=$6
@@ -32,10 +32,10 @@ docker ps
 
 if [ $2 != "" ] 
 then
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
     ret=$?
 else
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t ictu/zap2docker-weekly zap-full-scan.py -t $4 -J ZapReport.json $3
+    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -J ZapReport.json $3
     ret=$?
 fi
 

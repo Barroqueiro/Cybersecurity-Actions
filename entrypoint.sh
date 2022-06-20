@@ -138,8 +138,6 @@ fi
 
 for ST in "${scan_type[@]}"; do
 
-    ASSETS=$ACTION_PATH/$ST
-
     case $ST in
 
         BP)
@@ -152,7 +150,7 @@ for ST in "${scan_type[@]}"; do
         ;;
 
         VS)
-            $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD" "$DEBUG" "$OUTPUT_STYLES"
+            $ASSETS/InstallAndRunHorusec.sh --config "$HORUSEC_FILEPATH" --cmd "$HORUSEC_CMD" --debug "$DEBUG" --output-styles "$OUTPUT_STYLES"
             message $? $VS_ISBLOCKING "Vulnerability Scan"
         ;;
 
