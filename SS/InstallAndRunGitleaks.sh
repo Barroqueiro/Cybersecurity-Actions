@@ -1,19 +1,12 @@
 #!/bin/bash
 
 # Install, Run and Sumarise Gitleaks reporting
-#
-# $1 --> Full path inside github worker to the folder where this script resides
-# $2 --> Name of the repository we are analysing
-# $3 --> Aditional Gitleaks command line arguments
-# $4 --> Full path to the file containing the hases of secrets to ignore
-# $5 --> Debug mode
-# $6 --> Output Style
 
 function usage() {
     if [ -n "$1" ]; then
         echo -e "--> $1\n";
     fi
-    echo "Usage: $0 [--debug] [--config] [--cmd] [--output-styles]"
+    echo "Usage: $0 [--debug] [--config] [--cmd] [--repo] [--output-styles]"
     echo "------------------------------------ Required ------------------------------------"
     echo "                                                                    "
     echo "  --debug                        Is debug active"

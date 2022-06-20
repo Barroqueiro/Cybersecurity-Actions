@@ -173,7 +173,12 @@ for ST in "${scan_type[@]}"; do
         DS)
             if [ $IMAGE_TAG != "" ]
             then
-                $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLES"
+                $ASSETS/InstallAndRunDockle.sh \
+                        --tag "$IMAGE_TAG" \
+                        --config "$DOCKLE_FILEPATH" \
+                        --cmd "$DOCKLE_CMD" \
+                        --debug "$DEBUG" \
+                        --output-styles "$OUTPUT_STYLES"
                 message $? $DS_ISBLOCKING "Dockle Scan"
             else
                 echo "::error::For a Dockle type scan there needs to be a image tag passed as arguments"
