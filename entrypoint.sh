@@ -125,6 +125,8 @@ IFS=',' read -ra scan_type <<< "$SCAN_TYPE"
 
 # Setup
 
+python3 -m pip install Jinja2
+
 if [ $BUILD_SCRIPT != "" ]
 then
     ./$BUILD_SCRIPT
@@ -205,7 +207,12 @@ for ST in "${scan_type[@]}"; do
         ZS)
             if [ $ZAP_TARGET != "" ]
             then
-                $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET" "$DEBUG" "$OUTPUT_STYLES"
+                $ASSETS/InstallAndRunZaproxy.sh \
+                        --target "$ZAP_TARGET" \
+                        --config "$ZAP_FILEPATH" \
+                        --cmd "$ZAP_CMD" \
+                        --debug"$DEBUG" \
+                        --output-styles "$OUTPUT_STYLES"
                 message $? $ZS_ISBLOCKING "Zap Scan"
             else
                 echo "::error::For a Dynamic scan there needs to be a target passed as argument"

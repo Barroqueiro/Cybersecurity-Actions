@@ -1,51 +1,85 @@
 #!/bin/bash
 
 # Install, Run and Sumarise Zap reporting
-#
-# $1 --> Full path inside github worker to the folder where this script resides
-# $2 --> ZAP config file path inside the scanned repository
-# $3 --> Aditional Zap command line arguments
-# $4 --> Target to analyse
-# $5 --> Debug mode
-# $6 -->
 
-DEBUG=$5
-OUTPUT_STYLE=$6
+function usage() {
+    if [ -n "$1" ]; then
+        echo -e "--> $1\n";
+    fi
+    echo "Usage: $0 [--debug] [--config] [--cmd] [--target] [--output-styles]"
+    echo "------------------------------------ Required ------------------------------------"
+    echo "                                                                    "
+    echo "  --debug                        Is debug active"
+    echo "  --config                       Config file for Horusec"
+    echo "  --cmd                          Command line arguments for Horusec"
+    echo "  --target                       Target to scan"
+    echo "  --output-styles                Output styles requested"
+    echo ""
+    exit 1
+}
+
+# Parse params
+while [[ "$#" > 0 ]]; do case $1 in
+  --debug) DEBUG="$2"; shift;shift;;
+  --config) CONFIG="$2"; shift;shift;;
+  --cmd) CMD="$2"; shift;shift;;
+  --target) TARGET="$2"; shift;shift;;
+  --output-styles) OUTPUT_STYLES="$2"; shift;shift;;
+  *) usage "Unknown parameter passed: $1"; shift; shift;;
+esac; done
+
+ASSETS=$(dirname -- "$0")
 
 # To help debugging
 if [ $DEBUG = "true" ]
 then
     set -x
-    debug_dir="Reports/Debug/ZapScan"
-    mkdir -p $debug_dir
+    DEBUG_DIR="Reports/Debug/ZapScan"
+    mkdir -p $DEBUG_DIR
 fi
 
 # Directory configuration
-dir="Reports/ZapScan"
-assets="$1"
+DIR="Reports/ZapScan"
 
-volume="zap/wrk/"
+VOLUME="zap/wrk/"
 
-mkdir -p $volume
+mkdir -p $VOLUME
 
-docker ps
-
-if [ $2 != "" ] 
+if [ $CONFIG != "" ] 
 then
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -c "$2" -J ZapReport.json $3
-    ret=$?
+    docker run \
+            --user root \
+            -v $(pwd):/$VOLUME/:rw \
+            --network="host" \
+            -t owasp/zap2docker-stable zap-full-scan.py \
+            -t $TARGET \
+            -c "$CONFIG" \
+            -J ZapReport.json \
+            $CMD
+    RET=$?
 else
-    docker run --user root -v $(pwd):/$volume/:rw --network="host" -t owasp/zap2docker-stable zap-full-scan.py -t $4 -J ZapReport.json $3
-    ret=$?
+    docker run \
+            --user root \
+            -v $(pwd):/$volume/:rw \
+            --network="host" \
+            -t owasp/zap2docker-stable zap-full-scan.py \
+            -t $TARGET \
+            -J ZapReport.json \
+            $CMD
+    RET=$?
 fi
 
-mkdir -p $dir
-python3 -m pip install Jinja2
-python3 $assets/ZapReporting.py --json ZapReport.json --current-path $assets --output $dir/ZapReport --output-styles "$OUTPUT_STYLE"
+mkdir -p $DIR
+
+python3 $ASSETS/ZapReporting.py \
+            --json ZapReport.json \
+            --current-path $ASSETS \
+            --output $DIR/ZapReport \
+            --output-styles "$OUTPUT_STYLES"
 
 if [ $DEBUG = "true" ]
 then
-    mv ZapReport.json $debug_dir
+    mv ZapReport.json $DEBUG_DIR
 fi
 
-exit $ret
+exit $RET

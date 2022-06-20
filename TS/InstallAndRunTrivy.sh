@@ -48,7 +48,8 @@ fi
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
 
 # Run trivy against the image to scan
-trivy image $CMD \
+trivy image \
+        $CMD \
         --exit-code 1 \
         --format json \
         -o TrivyReport.json \
@@ -57,7 +58,6 @@ RET=$?
 
 # Sumarize the reports
 mkdir -p $DIR
-python3 -m pip install Jinja2
 python3 $ASSETS/TrivyReporting.py \
                 --json TrivyReport.json \
                 --current-path $ASSETS \

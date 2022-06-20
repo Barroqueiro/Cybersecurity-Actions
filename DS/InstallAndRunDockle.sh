@@ -64,7 +64,6 @@ RET=$?
 
 # Sumarize reports
 mkdir -p $DIR
-python3 -m pip install Jinja2
 python3 $ASSETS/DockleReporting.py \
                         --json DockleReport.json \
                         --current-path $ASSETS \
