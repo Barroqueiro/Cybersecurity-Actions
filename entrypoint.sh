@@ -138,7 +138,7 @@ fi
 
 for ST in "${scan_type[@]}"; do
 
-    ASSETS=$ACTION_PATH/$st
+    ASSETS=$ACTION_PATH/$ST
 
     case $ST in
 
