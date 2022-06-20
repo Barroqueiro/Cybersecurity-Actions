@@ -78,7 +78,7 @@ function message() {
     fi
 }
 
-# parse params
+# Parse params
 while [[ "$#" > 0 ]]; do case $1 in
   --debug) DEBUG="$2"; shift;shift;;
   --output-styles) OUTPUT_STYLES="$2"; shift;shift;;

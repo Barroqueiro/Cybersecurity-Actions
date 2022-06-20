@@ -9,6 +9,7 @@
 
 DEBUG=$4
 OUTPUT_STYLE=$5
+ASSETS=$(dirname -- "$0")
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -20,7 +21,7 @@ fi
 
 # Directory configuration
 dir="Reports/VulnerabilityScan"
-assets="$1"
+ASSETS="$1"
 
 # Install horusec
 curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
@@ -38,7 +39,7 @@ fi
 # Sumarise reports
 mkdir -p $dir
 python3 -m pip install Jinja2
-python3 $assets/HorusecReporting.py --json ./HorusecReport.json --current-path $assets --output $dir/HorusecReport --output-styles "$OUTPUT_STYLE"
+python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $dir/HorusecReport --output-styles "$OUTPUT_STYLE"
 
 if [ $DEBUG = "true" ]
 then
