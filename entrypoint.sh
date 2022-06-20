@@ -1,5 +1,20 @@
 #!/bin/bash
 
+function message() {
+if [ $1 = 1 ]
+then
+    if [ $2= "true" ]
+    then
+        echo "::error::$3 found problems, check the artifacts for more information"
+        ret=1
+    else
+        echo "::notice::$3 found problems but non blocking was active during this run"
+    fi
+else
+    echo "::notice::$3 did not find any problems"
+fi
+}
+
 function usage() {
   if [ -n "$1" ]; then
     echo -e "--> $1\n";
@@ -130,54 +145,21 @@ for st in "${scan_type[@]}"; do
         fi
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunProspectorAndRadon.sh "$ASSETS" "$PROSP_FILEPATH" "$PROSP_CMD" "$RADON_CMD" "$DEBUG" "$FILES_TOSCAN"
-        if [ $? = 1 ]
-        then
-            if [ $BP_ISBLOCKING = "true" ]
-            then
-                echo "::error::Bad Practices found problems, check the artifacts for more information"
-                ret=1
-            else
-                echo "::notice::Bad Practices found problems but non blocking was active during this run"
-            fi
-        else
-            echo "::notice::Bad Practices did not find any problems"
-        fi
+        message $? $BP_ISBLOCKING "Bad Practices"
     fi
 
     if [ $st = "VS" ] 
     then
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunHorusec.sh "$ASSETS" "$HORUSEC_FILEPATH" "$HORUSEC_CMD" "$DEBUG" "$OUTPUT_STYLES"
-        if [ $? = 1 ]
-        then
-            if [ $VS_ISBLOCKING = "true" ]
-            then
-                echo "::error::Vulnerability Scan found problems, check the artifacts for more information"
-                ret=1
-            else
-                echo "::notice::Vulnerability Scan found problems but non blocking was active during this run"
-            fi
-        else
-            echo "::notice::Vulnerability Scan did not find any problems"
-        fi
+        message $? $VS_ISBLOCKING "Vulnerability Scan"
     fi
 
     if [ $st = "SS" ] 
     then
         ASSETS=$ACTION_PATH/$st
         $ASSETS/InstallAndRunGitleaks.sh "$ASSETS" "$REPO_NAME" "$GITLEAKS_CMD" "$SECRETS_FILEPATH" "$DEBUG" "$OUTPUT_STYLES"
-        if [ $? = 1 ]
-        then
-            if [ $SS_ISBLOCKING = "true" ]
-            then
-                echo "::error::Secrets Scan found problems, check the artifacts for more information"
-                ret=1
-            else
-                echo "::notice::Secrets Scan found problems but non blocking was active during this run"
-            fi
-        else
-            echo "::notice::Secrets Scan did not find any problems"
-        fi
+        message $? $SSISBLOCKING "Secrets Scan"
     fi
 
     if [ $st = "DS" ] 
@@ -186,18 +168,7 @@ for st in "${scan_type[@]}"; do
         then
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunDockle.sh "$ASSETS" "$DOCKLE_FILEPATH" "$DOCKLE_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLES"
-            if [ $? = 1 ]
-            then
-                if [ $DS_ISBLOCKING = "true" ]
-                then
-                    echo "::error::Dockle Scan found problems, check the artifacts for more information"
-                    ret=1
-                else
-                    echo "::notice::Dockle Scan found problems but non blocking was active during this run"
-                fi
-            else
-                echo "::notice::Dockle Scan did not find any problems"
-            fi
+            message $? $DS_ISBLOCKING "Dockle Scan"
         else
             echo "::error::For a Dockle type scan there needs to be a image tag passed as arguments"
             ret=1
@@ -210,18 +181,7 @@ for st in "${scan_type[@]}"; do
         then
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLES"
-            if [ $? = 1 ]
-            then
-                if [ $TS_ISBLOCKING = "true" ]
-                then
-                    echo "::error::Trivy Scan found problems, check the artifacts for more information"
-                    ret=1
-                else
-                    echo "::notice::Trivy Scan found problems but non blocking was active during this run"
-                fi
-            else
-                echo "::notice::Trivy Scan did not find any problems"
-            fi
+            message $? $TS_ISBLOCKING "Trivy Scan"
         else
             echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"
             ret=1
@@ -234,18 +194,7 @@ for st in "${scan_type[@]}"; do
         then
             ASSETS=$ACTION_PATH/$st
             $ASSETS/InstallAndRunZaproxy.sh "$ASSETS" "$ZAP_FILEPATH" "$ZAP_CMD" "$ZAP_TARGET" "$DEBUG" "$OUTPUT_STYLES"
-            if [ $? = 1 ]
-            then
-                if [ $ZS_ISBLOCKING = "true" ]
-                then
-                    echo "::error::Zap Scan found problems, check the artifacts for more information"
-                    ret=1
-                else
-                    echo "::notice::Zap Scan found problems but non blocking was active during this run"
-                fi
-            else
-                echo "::notice::Zap Scan did not find any problems"
-            fi
+            message $? $ZS_ISBLOCKING "Zap Scan"
         else
             echo "::error::For a Dynamic scan there needs to be a target passed as argument"
             ret=1
