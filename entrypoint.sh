@@ -138,6 +138,8 @@ fi
 
 for ST in "${scan_type[@]}"; do
 
+    ASSETS=$ACTION_PATH/$ST
+
     case $ST in
 
         BP)
