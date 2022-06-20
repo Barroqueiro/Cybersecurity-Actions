@@ -1,5 +1,6 @@
 ----------------
 Stable-Horusec-Version: v2.8.0
+Satble-GitLeaks-Version: v8.8.7
 ----------------
 
 # Cybersecurity-Actions

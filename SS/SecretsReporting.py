@@ -1,44 +1,50 @@
 # Script developed to sumarize a Gitleaks json report and output results into a html file
 
 import sys
-from modules.tree import start
 import json
 import hashlib
 import argparse
 from datetime import datetime
+from modules.tree import start
 from jinja2 import Environment, FileSystemLoader
 
-# For each secret captured delete the date of the finding (So the hash of the same secret stays the same)
-# Calculate the hash using a string representation of the json of a secret
-# If this hash matches one of the designated to be ignore then output it as an accepted secret
-# If the secret is not to be ignored turn the return value to 1 to fail the pipeline and output it as a secret found
-# For either situation append the relavant information to be returnednd
-def make_secrets(secret_list,ignore):
+def parse_secrets_json(secret_list,ignore):
+    """
+    parse_secrets_json parses a json output from GitLeaks and transform it into a dictionary containing Secrets and Accepted secrets, 
+    these acepted secrets are a hash also computed by this function and passed within the ignore file
+
+    :param secret_list: list with secrets found by GitLeaks
+    :ignore: List of hashes of secrets to ignore and make as accepted secrets
+    """
     secrets = {"SECRETS":[],"ACCEPTED SECRETS":[]}
     ret = 0
+
     for s in secret_list:
         date = s["Date"]
         del s["Date"]
         h = hashlib.sha256(str(s).encode()).hexdigest()
+
         if h in ignore:
             status = "ACCEPTED SECRETS"
         else:
             status = "SECRETS"
             ret = 1
+
         description = s["Description"]
         match = s["Match"]
         location = s["File"] + " from line " + str(s["StartLine"]) + " to line " + str(s["EndLine"])
         commit = s["Commit"]
         Author = s["Email"]
+
         secrets[status].append({"description":description,"match":match,"location":start([location]),"commit":commit,"author":Author,"hash":h,"date":date})
 
     return secrets,ret
 
         
-# Read from the gitleaks json report and from the IgnoredSecrets.txt file
-# Pass these informations to the make_secrets function
-# Return 1 if a secret not ignored is found
 def main():
+    """
+    main parse the arguments needed for execution, output the requested types and create the dictionaries of secrets
+    """
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
                         help='Json to analyse')
@@ -60,18 +66,21 @@ def main():
         ig = ignore.read().split("\n")
 
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    secrets,ret = make_secrets(data,ig)
+    secrets,ret = parse_secrets_json(data,ig)
 
     styles = config["output_styles"].split(",")
     for s in styles:
         if s == "HTML":
+
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
             template = env.get_template('SecretsTemplateHTML.jinja2')
             colors = {"SECRETS":"#F3836B","ACCEPTED SECRETS":"#50C878"}
             output_from_parsed_template = template.render(secrets=secrets,today=today,colors=colors)
             with open(config["output"]+".html","w") as f:
                 f.write(output_from_parsed_template)
+
         if s == "MD":
+
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"))
             template = env.get_template('SecretsTemplateMD.jinja2')
             output_from_parsed_template = template.render(secrets=secrets)

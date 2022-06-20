@@ -29,7 +29,7 @@ def parse_horusec_json(vuln_list):
         hash = vuln["vulnHash"]
         severity = vuln["severity"]
         details = vuln["details"].replace("* Possible vulnerability detected: ","\n\n")
-        details = details.sub('\([1-9]*/[1-9]*\)',"Problem: ",details)
+        details = re.sub('\([1-9]*/[1-9]*\)',"Problem: ",details)
 
 
         if details in vulns_by_severity[severity]:
@@ -50,7 +50,7 @@ def parse_horusec_json(vuln_list):
 
 def main():
     """
-    main parse the arguments needed for execution, output the requested types and create the dictionaries of vulnerbailities
+    main parse the arguments needed for execution, output the requested types and create the dictionaries of vulnerabilities
     """
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
