@@ -189,7 +189,12 @@ for ST in "${scan_type[@]}"; do
         TS)
             if [ $IMAGE_TAG != "" ]
             then
-                $ASSETS/InstallAndRunTrivy.sh "$ASSETS" "$TRIVY_FILEPATH" "$TRIVY_CMD" "$IMAGE_TAG" "$DEBUG" "$OUTPUT_STYLES"
+                $ASSETS/InstallAndRunTrivy.sh \
+                        --tag "$IMAGE_TAG" \
+                        --config "$TRIVY_FILEPATH" \
+                        --cmd "$TRIVY_CMD" \
+                        --debug "$DEBUG" \
+                        --output-styles "$OUTPUT_STYLES"
                 message $? $TS_ISBLOCKING "Trivy Scan"
             else
                 echo "::error::For a Container type scan there needs to be a build script and a image tag passed as arguments"

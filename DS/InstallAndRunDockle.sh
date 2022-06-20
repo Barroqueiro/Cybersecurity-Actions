@@ -54,7 +54,12 @@ VERSION=$(
 sudo dpkg -i dockle.deb && rm dockle.deb
 
 # Run dockle against the image
-dockle --exit-code 1 $CMD -f json -o DockleReport.json $TAG
+dockle \
+    --exit-code 1 \
+    $CMD \
+    -f json \
+    -o DockleReport.json \
+    $TAG
 RET=$?
 
 # Sumarize reports
