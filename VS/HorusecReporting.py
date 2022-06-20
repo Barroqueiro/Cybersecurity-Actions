@@ -9,10 +9,11 @@ from jinja2 import Environment, FileSystemLoader
 
 def parse_horusec_json(vuln_list):
     """
-    parse_horusec_json parses a json output for a horusec scan, and turns it into a dictionary containing vulenrbailities split by their severity, 
+    parse_horusec_json parses a json output for a horusec scan, and turns it into a dictionary containing vulnerabilities split by their severity, 
     and inside by their description with diferente instances being agregated
 
     :param vuln_list: list of vulnerabilities from the horusec json file
+    :return: dict with vulnerbailities ordered by severity
     """
 
     vulns_by_severity = {"CRITICAL":{},"HIGH":{},"MEDIUM":{},"LOW":{},"UNKNOWN":{}}
@@ -28,7 +29,7 @@ def parse_horusec_json(vuln_list):
         hash = vuln["vulnHash"]
         severity = vuln["severity"]
         details = vuln["details"].replace("* Possible vulnerability detected: ","\n\n")
-        details = details.sub('([1-9]*/[1-9]*)',"Problem: ",details)
+        details = details.sub('\([1-9]*/[1-9]*\)',"Problem: ",details)
 
 
         if details in vulns_by_severity[severity]:
@@ -44,15 +45,13 @@ def parse_horusec_json(vuln_list):
                 list_of_instances.append(instance["location"])
             vulns_by_severity[key][k]["tree"] = start(list_of_instances)
 
-    # Sort keys
-    for key in vulns_by_severity:
-        sorted(vulns_by_severity[key])
-
     return vulns_by_severity
 
 
 def main():
-
+    """
+    main parse the arguments needed for execution, output the requested types and create the dictionaries of vulnerbailities
+    """
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
                         help='Json to analyse')
