@@ -211,7 +211,7 @@ for ST in "${scan_type[@]}"; do
                         --target "$ZAP_TARGET" \
                         --config "$ZAP_FILEPATH" \
                         --cmd "$ZAP_CMD" \
-                        --debug"$DEBUG" \
+                        --debug "$DEBUG" \
                         --output-styles "$OUTPUT_STYLES"
                 message $? $ZS_ISBLOCKING "Zap Scan"
             else
