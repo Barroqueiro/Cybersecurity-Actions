@@ -152,7 +152,11 @@ for ST in "${scan_type[@]}"; do
         ;;
 
         VS)
-            $ASSETS/InstallAndRunHorusec.sh --config "$HORUSEC_FILEPATH" --cmd "$HORUSEC_CMD" --debug "$DEBUG" --output-styles "$OUTPUT_STYLES"
+            $ASSETS/InstallAndRunHorusec.sh \
+                        --config "$HORUSEC_FILEPATH" \
+                        --cmd "$HORUSEC_CMD" \
+                        --debug "$DEBUG" \
+                        --output-styles "$OUTPUT_STYLES"
             message $? $VS_ISBLOCKING "Vulnerability Scan"
         ;;
 

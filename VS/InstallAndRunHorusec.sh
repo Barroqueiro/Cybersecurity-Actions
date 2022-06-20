@@ -55,7 +55,7 @@ fi
 # Sumarise reports
 mkdir -p $DIR
 python3 -m pip install Jinja2
-python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $DIR/HorusecReport --output-styles "$OUTPUT_STYLE"
+python3 $ASSETS/HorusecReporting.py --json ./HorusecReport.json --current-path $ASSETS --output $DIR/HorusecReport --output-styles "$OUTPUT_STYLES"
 
 if [ $DEBUG = "true" ]
 then
