@@ -4,7 +4,7 @@ function usage() {
     if [ -n "$1" ]; then
         echo -e "--> $1\n";
     fi
-    echo "Usage: $0 [--debug] [--config] [--cmd] [--output-styles]"
+    echo "Usage: $0 [--debug] [--config] [--cmd] [--tag] [--output-styles]"
     echo "------------------------------------ Required ------------------------------------"
     echo "                                                                    "
     echo "  --debug                        Is debug active"
@@ -58,7 +58,7 @@ RET=$?
 # Sumarize the reports
 mkdir -p $DIR
 python3 -m pip install Jinja2
-python3 $ASSETS/TrivyReporting.py 
+python3 $ASSETS/TrivyReporting.py \
                 --json TrivyReport.json \
                 --current-path $ASSETS \
                 --output $DIR/TrivyReport \
