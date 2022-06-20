@@ -38,7 +38,6 @@ fi
 
 # Directory configuration
 DIR="Reports/VulnerabilityScan"
-ASSETS="$1"
 
 # Install horusec
 curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scripts/install.sh | bash -s latest
