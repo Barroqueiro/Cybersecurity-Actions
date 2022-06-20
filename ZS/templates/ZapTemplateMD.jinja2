@@ -20,7 +20,7 @@
 {% endfor %}
 ### CWE
 {% if vuln["cwe"] != "NOT APPLICABLE" %}
-[{{ vuln["cwe"] }}]("https://cwe.mitre.org/data/definitions/{{ vuln['cwe'] }}.html)
+[{{ vuln["cwe"] }}](https://cwe.mitre.org/data/definitions/{{ vuln['cwe'] }}.html)
 {% endif %}
 {% if vuln["cwe"] == "NOT APPLICABLE" %}
 {{ vuln["cwe"] }}

@@ -34,7 +34,7 @@ def parse_zap_json(sites):
             instances = a["instances"]
             solution = a["solution"]
             references = a["reference"].split("<p>")[1:]
-            if "cweid" in a:
+            if "cweid" in a and int(a["cweid"]) > 0:
                 cwe = a["cweid"]
             else:
                 cwe = "NOT APPLICABLE"
