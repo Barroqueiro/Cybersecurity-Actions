@@ -18,7 +18,7 @@
   {% for key in vulns %}
       {% if vulns[key] != {} %}
       <a class="btn btn-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black;border-color: black">
-              Found {{ vulns[key] | count }} {{ key }} Severity Vulnerabilities
+              Found {{ vulns[key] | count }} {{ key.lower().capitalize() }} Severity Vulnerabilities
       </a>
       <div>&nbsp;</div>
       <div class="collapse" id="{{key}}">

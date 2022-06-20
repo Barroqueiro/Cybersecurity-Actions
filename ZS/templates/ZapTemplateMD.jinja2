@@ -1,7 +1,7 @@
 {% for site in vulns %}
 {% for key in site["vulns"] %}
 {% if site["vulns"][key] != [] %}
-# {{ key }}
+# {{ key.lower().capitalize() }}
 {% for vuln in site["vulns"][key] %}
 ## {{ vuln["name"].replace(" - ","-").replace("-"," ").replace("(","").replace(")","") }}
 

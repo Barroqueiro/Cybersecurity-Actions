@@ -1,6 +1,6 @@
 {% for key in vulns %}
 {% if vulns[key] != {} %}
-# {{ key }}
+# {{ key.lower().capitalize() }}
 {% for vuln in vulns[key] %}
 ## {{ vuln }}
 

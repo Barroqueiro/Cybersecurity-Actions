@@ -1,15 +1,21 @@
-# Script developed to sumarize a trivy json report and output results into a html file
+# Script developed to sumarize a trivy json report
 
-import sys
 import json
 import argparse
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
+def parse_trivy_json(vuln_list):
+    """
+    parse_trivy_json parses a json output form a trivy run, and outputs a dictionary with the severity of the vulnerabilities found as well as information about them, 
+    some values do not have information because theya re not provided by trivy
 
-# For each vulnerability get the most important details and add default values if no value is found within the json
-def make_vulns(vuln_list):
+    :param vuln_list: List of vulnerabilities found by trivy in json format
+    :return: Dictionary with the vulnerabilities organized by severity
+    """
+
     vulns_by_severity = {"CRITICAL":{},"HIGH":{},"MEDIUM":{},"LOW":{},"UNKNOWN":{}}
+
     for v in vuln_list:
         if "VulnerabilityID" in v:
             id = v["VulnerabilityID"]
@@ -47,6 +53,7 @@ def make_vulns(vuln_list):
             cwes = [x.replace("CWE-","") for x in v["CweIDs"]]
         else:
             cwes = []
+
         count_avg = 0
         if "CVSS" in v:
             cvss = v["CVSS"]
@@ -59,18 +66,18 @@ def make_vulns(vuln_list):
             avg = round(sum_avg/count_avg,1)
         else:
             avg = "NOT KNOWN"
+
         if id in vulns_by_severity[severity]:
             vulns_by_severity[severity][id]["pkg_name"].append(pkg_name)
         else:
             vulns_by_severity[severity][id] = {"id":id,"pkg_name":[pkg_name],"installed_version":installed_version,"fixed_version":fixed_version,"vuln_url":vuln_url,"title":title,"description":description,"cwes":cwes,"cvss":avg}
-    for key in vulns_by_severity:
-        sorted(vulns_by_severity[key])
+
     return vulns_by_severity
 
-
-# Read form the json horusec report
-# Call the make_vulns functions to output results on the list of vulnerabilities found
 def main():
+    """
+    main parse the arguments needed for execution, output the requested types and create the dictionaries of vulnerabilities
+    """
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
                         help='Json to analyse')
@@ -88,18 +95,21 @@ def main():
 
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     vuln_list = data[0]["Vulnerabilities"]
-    vulns = make_vulns(vuln_list)
+    vulns = parse_trivy_json(vuln_list)
 
     styles = config["output_styles"].split(",")
     for s in styles:
         if s == "HTML":
+
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
             template = env.get_template('TrivyTemplateHTML.jinja2')
             colors = {"CRITICAL":"#F3836B","HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","UNKNOWN":"#53DAC1"}
             output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
             with open(config["output"]+".html","w") as f:
                 f.write(output_from_parsed_template)
+
         if s == "MD":
+
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
             template = env.get_template('TrivyTemplateMD.jinja2')
             output_from_parsed_template = template.render(vulns=vulns)

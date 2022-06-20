@@ -1,13 +1,19 @@
-# Script developed to sumarize a Zap json report and output results into a html file
+# Script developed to sumarize a Zap json report 
 
-import sys
 import json
 import argparse
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
-# For each vulnerability get the most important details
-def make_vulns(sites):
+def parse_zap_json(sites):
+    """
+    parse_zap_json parses a json output form a zap run, and outputs a dictionary with the severity of the vulnerabilities found as well as information about them, 
+    a lot of parsing is done as the output is formated for HTML
+
+    :param sites: List of sites found by zap within json format
+    :return: Dictionary with the vulnerabilities organized by severity
+    """
+
     ret_sites = []
     for s in sites:
         if s["alerts"] == []:
@@ -33,7 +39,9 @@ def make_vulns(sites):
             else:
                 cwe = "NOT APPLICABLE"
             vulns_by_severity[severity.upper()].append({"id":id,"name":name,"confidence":confidence,"instances":instances,"solution":solution,"references":references,"cwe":cwe})
+        
         site["vulns"] = vulns_by_severity    
+
         if "ignoredAlerts" in s:
             for a in s["ignoredAlerts"]:
                 id = a["alertRef"]
@@ -49,12 +57,15 @@ def make_vulns(sites):
                 else:
                     cwe = "NOT APPLICABLE"
                 vulns_by_severity[severity.upper()].append({"id":id,"name":name,"confidence":confidence,"instances":instances,"solution":solution,"references":references,"cwe":cwe})
+        
         ret_sites.append(site)
+
     return ret_sites
 
-# Read form the json horusec report
-# Call the make_vulns function to get results on the list of vulnerabilities found
 def main():
+    """
+    main parse the arguments needed for execution, output the requested types and create the dictionaries of vulnerabilities
+    """
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
                         help='Json to analyse')
@@ -72,18 +83,21 @@ def main():
 
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     sites = data["site"]
-    vulns = make_vulns(sites)
+    vulns = parse_zap_json(sites)
 
     styles = config["output_styles"].split(",")
     for s in styles:
         if s == "HTML":
+
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"), autoescape=True)
             template = env.get_template('ZapTemplateHTML.jinja2')
             colors = {"HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","INFORMATIONAL":"#53DAC1","IGNORED":"#50C878"}
             output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
             with open(config["output"]+".html","w") as f:
                 f.write(output_from_parsed_template)
+
         if s == "MD":
+            
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"))
             template = env.get_template('ZapTemplateMD.jinja2')
             appendix = env.get_template('ZapTemplateAppendixMD.jinja2')

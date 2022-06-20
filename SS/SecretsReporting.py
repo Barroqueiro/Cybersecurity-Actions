@@ -1,4 +1,4 @@
-# Script developed to sumarize a Gitleaks json report and output results into a html file
+# Script developed to sumarize a Gitleaks json report
 
 import sys
 import json

@@ -1,7 +1,7 @@
 {% for key in vulns %}
 {% if vulns[key] != {} %}
 
-# {{ key }}
+# {{ key.lower().capitalize() }}
 {% for vuln in vulns[key] %}
 ## {{ key.lower().capitalize() }} Vulnerability {{ loop.index }}
 {{ vuln.replace("##","###").replace("```","\n```").replace("$","```$```").replace("\\","```\\```").replace("Cwe Links","\nCwe Links").replace("PrimaryURL","\nPrimaryURL") }}
