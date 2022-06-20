@@ -64,7 +64,7 @@ python3 $ASSETS/DockleReporting.py \
                         --json DockleReport.json \
                         --current-path $ASSETS \
                         --output $DIR/DockleReport \
-                        --output-styles "$OUTPUT_STYLE"
+                        --output-styles "$OUTPUT_STYLES"
 if [ $DEBUG = "true" ]
 then
     mv DockleReport.json $DEBUG_DIR
