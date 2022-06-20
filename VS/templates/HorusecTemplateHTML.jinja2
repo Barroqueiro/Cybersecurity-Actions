@@ -18,40 +18,40 @@
     {% for key in vulns %}
       {% if vulns[key] != {} %}
           <a class="btn btn-outline-primary btn-block" data-bs-toggle="collapse" href="#{{key}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black; border-color: black">
-              Found {{ vulns[key] | count }} {{ key }} Severity Vulnerabilities
+              Found {{ vulns[key] | count }} {{ key.lower().capitalize() }} Severity Vulnerabilities
           </a>
           <div>&nbsp;</div>
           <div class="collapse" id="{{key}}">
             {% for vuln in vulns[key] %}
+              <table class="table table-bordered table-hover" >
+              <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#{{ key }}Vulnerability{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black;; border-color: black">
+                    {{ key }} Vulnerability {{ loop.index }}
+              </a>
+              <tbody class="collapse show" id="{{ key }}Vulnerability{{ loop.index }}">
+                <tr>
+                  <td colspan="2" style="text-align:left; white-space: pre-wrap;">{{ vuln }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align:center"><b>Instances</b></td>
+                </tr>
+                {% for instance in vulns[key][vuln]["list_instances"] %}
+                  <tr>
+                    <td colspan="2">
                       <table class="table table-bordered table-hover" >
-                      <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#{{ key }}Vulnerability{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: {{ colors[key] }};width: 100%;font-weight: bold;color:black;; border-color: black">
-                            {{ key }} Vulnerability {{ loop.index }}
-                      </a>
-                      <tbody class="collapse show" id="{{ key }}Vulnerability{{ loop.index }}">
                         <tr>
-                          <td colspan="2" style="text-align:left; white-space: pre-wrap;">{{ vuln }}</td>
+                          <td>Location</td>
+                          <td>{{ instance["location"] }}</td>
                         </tr>
                         <tr>
-                          <td colspan="2" style="text-align:center"><b>Instances</b></td>
+                          <td>Hash</td>
+                          <td>{{ instance["hash"] }}</td>
                         </tr>
-                        {% for instance in vulns[key][vuln]["list_instances"] %}
-                          <tr>
-                            <td colspan="2">
-                              <table class="table table-bordered table-hover" >
-                                <tr>
-                                  <td>Location</td>
-                                  <td>{{ instance["location"] }}</td>
-                                </tr>
-                                <tr>
-                                  <td>Hash</td>
-                                  <td>{{ instance["hash"] }}</td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
+                      </table>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
             {% endfor %}
           </div>
         {% endif %}

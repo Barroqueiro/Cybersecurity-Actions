@@ -1,41 +1,58 @@
-# Script developed to sumarize a horusec json report and output results into a html file
+# Script developed to sumarize a horusec json report
 
-import sys
-from modules.tree import start
+import re
 import json
 import argparse
 from datetime import datetime
+from modules.tree import start
 from jinja2 import Environment, FileSystemLoader
 
-# For each vulnerability get the most important details
-def make_vulns(vuln_list):
+def parse_horusec_json(vuln_list):
+    """
+    parse_horusec_json parses a json output for a horusec scan, and turns it into a dictionary containing vulenrbailities split by their severity, 
+    and inside by their description with diferente instances being agregated
+
+    :param vuln_list: list of vulnerabilities from the horusec json file
+    """
+
     vulns_by_severity = {"CRITICAL":{},"HIGH":{},"MEDIUM":{},"LOW":{},"UNKNOWN":{}}
+
+    # Return empty list if no vulnerbailities
     if vuln_list is None:
         return vulns_by_severity
+
     for v in vuln_list:
+
         vuln = v["vulnerabilities"]
         location = vuln["file"] + " at line " + vuln["line"]
         hash = vuln["vulnHash"]
         severity = vuln["severity"]
         details = vuln["details"].replace("* Possible vulnerability detected: ","\n\n")
+        details = details.sub('([1-9]*/[1-9]*)',"Problem: ",details)
+
+
         if details in vulns_by_severity[severity]:
             vulns_by_severity[severity][details]["list_instances"].append({"location":location,"hash":hash})
         else: 
             vulns_by_severity[severity][details] = {"list_instances":[{"location":location,"hash":hash}]}
-    l = []
+
+    list_of_instances = []
     for key in vulns_by_severity:
         for k in vulns_by_severity[key]:
-            l = []
+            list_of_instances = []
             for instance in vulns_by_severity[key][k]["list_instances"]:
-                l.append(instance["location"])
-            vulns_by_severity[key][k]["tree"] = start(l)
+                list_of_instances.append(instance["location"])
+            vulns_by_severity[key][k]["tree"] = start(list_of_instances)
+
+    # Sort keys
     for key in vulns_by_severity:
         sorted(vulns_by_severity[key])
+
     return vulns_by_severity
 
-# Read form the json horusec report
-# Call the make_vulns function to get results on the list of vulnerabilities found
+
 def main():
+
     parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
     parser.add_argument('--json', type=str,
                         help='Json to analyse')
@@ -53,7 +70,7 @@ def main():
 
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     vuln_list = data["analysisVulnerabilities"]
-    vulns = make_vulns(vuln_list)
+    vulns = parse_horusec_json(vuln_list)
 
     styles = config["output_styles"].split(",")
     for s in styles:
@@ -62,14 +79,17 @@ def main():
             template = env.get_template('HorusecTemplateHTML.jinja2')
             colors = {"CRITICAL":"#F3836B","HIGH":"#F1A36A","MEDIUM":"#F9D703","LOW":"#6AB4F1","UNKNOWN":"#53DAC1"}
             output_from_parsed_template = template.render(vulns=vulns,today=today,colors=colors)
+
             with open(config["output"]+".html","w") as f:
                 f.write(output_from_parsed_template)
+
         if s == "MD":
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
             template = env.get_template('HorusecTemplateMD.jinja2')
             appendix = env.get_template('HorusecTemplateAppendixMD.jinja2')
             output_from_parsed_template = template.render(vulns=vulns)
             output_from_parsed_template_appendix = appendix.render(vulns=vulns)
+
             with open(config["output"]+".md","w") as f:
                 f.write(output_from_parsed_template)
             with open(config["output"]+"Appendix"+".md","w") as f:

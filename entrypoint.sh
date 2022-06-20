@@ -16,7 +16,7 @@ function usage() {
     echo "                                                                    "
     echo "  --build-script                 Script used to build the image"
     echo "  --image-tag                    Tag resultant of the build script"
-    echo "  --run-script                   Script used to run the conatiner"
+    echo "  --run-script                   Script used to run the container"
     echo "  --zap-target                   Zap target to analyse"
     echo "                                                                    "
 
@@ -149,7 +149,12 @@ for ST in "${scan_type[@]}"; do
             then
                 FILES_TOSCAN=$(find . -type f | grep "^.*\.py$" | cut -c 3-)
             fi
-            $ASSETS/InstallAndRunProspectorAndRadon.sh "$ASSETS" "$PROSP_FILEPATH" "$PROSP_CMD" "$RADON_CMD" "$DEBUG" "$FILES_TOSCAN"
+            $ASSETS/InstallAndRunProspectorAndRadon.sh \
+                        --config "$PROSP_FILEPATH" \
+                        --cmd-p "$PROSP_CMD" \
+                        --cmd-rd "$RADON_CMD" \
+                        --debug "$DEBUG" \
+                        --files-toscan "$FILES_TOSCAN"
             message $? $BP_ISBLOCKING "Bad Practices"
         ;;
 

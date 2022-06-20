@@ -1,3 +1,7 @@
+----------------
+Stable-Horusec-Version: v2.8.0
+----------------
+
 # Cybersecurity-Actions
 
 ## Author
