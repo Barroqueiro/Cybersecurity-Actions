@@ -1,8 +1,8 @@
-# Script developed to sumarize prospector and radon json reports and output results into a html file
+# Script developed to sumarize prospector and radon json reports
 
-from importlib.resources import read_text
 import sys
 import json
+import argparse
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 
@@ -53,21 +53,48 @@ def make_radon(radon):
 # Load the prospector and radon reports
 # Call the designated functions to output the summaries of both tools
 def main():
-    with open(sys.argv[1],"r",encoding="UTF-8") as prosp:
+    parser = argparse.ArgumentParser(description="Comparing diferences in json file on a certain keyword")
+    parser.add_argument('--json', type=str,
+                        help='Json to analyse')
+    parser.add_argument('--txt', type=str,
+                        help='Txt to analyse')
+    parser.add_argument('--current-path', type=str,
+                        help='Current path')
+    parser.add_argument('--output-styles', type=str,
+                        help='Output style')
+    parser.add_argument('--output', type=str,
+                        help='File to output the result')
+    args = parser.parse_args()
+    config = vars(args)
+
+    with open(config["json"],"r",encoding="UTF-8") as prosp:
         data = json.loads(prosp.read())
-    with open(sys.argv[2],"r",encoding="UTF-8") as rad:
+
+    with open(config["txt"],"r",encoding="UTF-8") as rad:
         radon = rad.readlines()
+
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     ret,vulns = make_vulns(data["messages"])
     radon_cc = make_radon(radon)
-    env = Environment(loader=FileSystemLoader(sys.argv[3]),autoescape=True)
-    template = env.get_template('BadPracticesTemplate.jinja2')
-    radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
-    file_fullpath = sys.argv[4]
-    filename = file_fullpath.split("/")[-1].replace(".html","").replace("\\","/") + ".py"
-    output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,today=today,radon_colors=radon_colors,filename=filename)
-    with open(file_fullpath,"w") as f:
-        f.write(output_from_parsed_template)
+
+    styles = config["output_styles"].split(",")
+    for s in styles:
+        if s == "HTML":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
+            template = env.get_template('BadPracticesTemplateHTML.jinja2')
+            radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
+            filename = config["output"].split("/")[-1].replace(".html","").replace("\\","/") + ".py"
+            output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,today=today,radon_colors=radon_colors,filename=filename)
+            with open(config["output"],"w") as f:
+                f.write(output_from_parsed_template)
+        if s == "MD":
+            env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
+            template = env.get_template('BadPracticesTemplateMD.jinja2')
+            output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,filename=filename)
+
+            with open(config["output"]+".md","w") as f:
+                f.write(output_from_parsed_template)
+            
     sys.exit(ret)
 
 if __name__ == "__main__":
