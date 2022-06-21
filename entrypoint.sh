@@ -154,7 +154,8 @@ for ST in "${scan_type[@]}"; do
                         --cmd-p "$PROSP_CMD" \
                         --cmd-rd "$RADON_CMD" \
                         --debug "$DEBUG" \
-                        --files-toscan "$FILES_TOSCAN"
+                        --files-toscan "$FILES_TOSCAN" \
+                        --output-styles "$OUTPUT_STYLES"
             message $? $BP_ISBLOCKING "Bad Practices"
         ;;
 
