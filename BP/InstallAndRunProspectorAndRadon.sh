@@ -88,7 +88,11 @@ for file in $FILES_TOSCAN; do
                     -0 "$before"
         fi
         radon cc $CMD_RD "$before" > "$radon_file"
-        python3 $ASSETS/BadPracticesReporting.py "$prosp_file" "$radon_file" $ASSETS $DIR/"$final_file"
+        python3 $ASSETS/BadPracticesReporting.py \
+                    --json "$prosp_file" \
+                    --txt "$radon_file" \
+                    --current-path "$ASSETS" \
+                    --output $DIR/"$final_file"
         temp=$?
         if [ $temp = 1 ] 
         then
