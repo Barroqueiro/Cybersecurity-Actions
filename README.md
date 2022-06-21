@@ -346,6 +346,15 @@ These are true by default but if anything different than the string 'true' is pa
 
 If debug is set to `true`, debug files (jsons directly from each tool) will be included within the artifacts
 
+### Output styles
+
+    Name: output-styles
+    Required: False
+    Default: 'HTML'
+
+Output styles from the report created, 2 options are available `HTML` and `MD`, either one can be chosen or they can be combined using commas.
+
+
 ### Anotations that can be found
 
 #### **Error Messages**
@@ -370,17 +379,22 @@ Always a structure like the one bellow
 
     Reports
     ├── BadPracticesScan
-    │   └── Directories of the original repository with html files
+    │   └── Directories of the original repository with html/md files
     ├── DockleScan
-    │   └── DockleReport.html
+    │   ├── DockleReport.html
+    │   └── DockleReport.md
     ├── SecretScan
-    │   └── SecretsReport.html
+    │   ├── SecretsReport.html
+    │   └── SecretsReport.md
     ├── TrivyScan
-    │   └── TrivyReport.html
+    │   ├── TrivyReport.html
+    │   └── TrivyReport.md
     ├── VulnerabilityScan
-    │   └── HorusecReport.html
+    │   ├── HorusecReport.html
+    │   └── HorusecReport.md
     ├── ZapScan
-    │    └── ZapReport.html
+    │   ├── ZapReport.html
+    │   └── ZapReport.md
     └── Debug
         ├── BadPracticesScan
         │   └── Directories of the original repository with json and txt files
