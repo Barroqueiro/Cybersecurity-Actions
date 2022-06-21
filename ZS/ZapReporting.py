@@ -24,6 +24,7 @@ def parse_zap_json(sites):
         site["port"] = s["@port"]
         site["ssl"] = s["@ssl"]
         vulns_by_severity = {"HIGH":[],"MEDIUM":[],"LOW":[],"INFORMATIONAL":[],"IGNORED":[]}
+
         for a in s["alerts"]:
             id = a["alertRef"]
             name = a["name"]
@@ -38,7 +39,14 @@ def parse_zap_json(sites):
                 cwe = a["cweid"]
             else:
                 cwe = "NOT APPLICABLE"
-            vulns_by_severity[severity.upper()].append({"id":id,"name":name,"confidence":confidence,"instances":instances,"solution":solution,"references":references,"cwe":cwe})
+
+            vulns_by_severity[severity.upper()].append({"id":id,
+                                                        "name":name,
+                                                        "confidence":confidence,
+                                                        "instances":instances,
+                                                        "solution":solution,
+                                                        "references":references,
+                                                        "cwe":cwe})
         
         site["vulns"] = vulns_by_severity    
 
@@ -56,7 +64,13 @@ def parse_zap_json(sites):
                     cwe = a["cweid"]
                 else:
                     cwe = "NOT APPLICABLE"
-                vulns_by_severity[severity.upper()].append({"id":id,"name":name,"confidence":confidence,"instances":instances,"solution":solution,"references":references,"cwe":cwe})
+                vulns_by_severity[severity.upper()].append({"id":id,
+                                                            "name":name,
+                                                            "confidence":confidence,
+                                                            "instances":instances,
+                                                            "solution":solution,
+                                                            "references":references,
+                                                            "cwe":cwe})
         
         ret_sites.append(site)
 
