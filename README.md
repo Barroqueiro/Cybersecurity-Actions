@@ -1,8 +1,11 @@
 ---
-Stable-Horusec-Version: v2.8.0
-Satble-GitLeaks-Version: v8.8.7
-Stable-Dockle-Version: v0.4.5
-Stable-Teivy-Version: v0.18.3
+Stable-Prospector-Version: 1.7.7
+Stable-Radon-Version: 4.1.0
+Stable-Horusec-Version: 2.8.0
+Satble-GitLeaks-Version: 8.8.7
+Stable-Dockle-Version: 0.4.5
+Stable-Trivy-Version: 0.18.3
+Stable-Zap-Version: 2.11.1
 ---
 
 # Cybersecurity-Actions

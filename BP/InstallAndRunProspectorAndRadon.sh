@@ -64,7 +64,7 @@ for file in $FILES_TOSCAN; do
         file=${file////\\}
         prosp_file=${file}_prospector.json
         radon_file=${file}_radon.txt
-        final_file=${file//$sufix/$empty}.html
+        final_file=${file//$sufix/$empty}
 
 
         # Run prospector and radon, compile results with the BadPracticesReporting script, clean the files that are no longer useful

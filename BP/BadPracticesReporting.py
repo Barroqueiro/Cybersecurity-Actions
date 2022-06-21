@@ -85,7 +85,7 @@ def main():
             radon_colors = {"F":"#E12525","E":"#E15625","D":"#E1A525","C":"#E8F307","B":"#81F307","A":"#3DF307"}
             filename = config["output"].split("/")[-1].replace(".html","").replace("\\","/") + ".py"
             output_from_parsed_template = template.render(vulns=vulns,radon=radon_cc,today=today,radon_colors=radon_colors,filename=filename)
-            with open(config["output"],"w") as f:
+            with open(config["output"]+".html","w") as f:
                 f.write(output_from_parsed_template)
         if s == "MD":
             env = Environment(loader=FileSystemLoader(config["current_path"]+"/templates"),autoescape=True)
