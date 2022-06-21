@@ -1,6 +1,8 @@
 ---
 Stable-Horusec-Version: v2.8.0
 Satble-GitLeaks-Version: v8.8.7
+Stable-Dockle-Version: v0.4.5
+Stable-Teivy-Version: v0.18.3
 ---
 
 # Cybersecurity-Actions
