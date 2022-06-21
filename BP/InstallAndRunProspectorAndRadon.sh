@@ -1,12 +1,6 @@
 #!/bin/bash
 
 # Install, Run and Sumarise Prospector and Radon reporting
-#
-# $1 --> Full path inside github worker to the folder where this script resides
-# $2 --> Prospector profile file path inside the scanned repository
-# $3 --> Aditional prospector command line arguments
-# $4 --> Aditional radon command line arguments
-# $5 --> Debug mode
 
 function usage() {
     if [ -n "$1" ]; then

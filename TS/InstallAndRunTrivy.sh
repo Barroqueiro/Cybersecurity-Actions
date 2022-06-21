@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Install, Run and Sumarise Trivy reporting
 
 function usage() {

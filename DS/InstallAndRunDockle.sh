@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Install, Run and Sumarise Dockle reporting
 
 function usage() {
