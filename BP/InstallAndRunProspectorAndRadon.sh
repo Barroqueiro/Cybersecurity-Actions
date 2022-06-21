@@ -92,7 +92,7 @@ for file in $FILES_TOSCAN; do
                     --json "$prosp_file" \
                     --txt "$radon_file" \
                     --current-path "$ASSETS" \
-                    --output $DIR/"$final_file"
+                    --output $DIR/"$final_file" \
                     --output-styles "$OUTPUT_STYLES"
         temp=$?
         if [ $temp = 1 ] 
