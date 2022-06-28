@@ -123,12 +123,11 @@ runs:
       if: always()
       id: generate-name
       run: |
-        echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"
+        echo "::set-output name=artifact::$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)"
       shell: bash
     - name: Upload artifact
       if: always()
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ steps.generate-name.outputs.artifact }}
         path: Reports/
-        
