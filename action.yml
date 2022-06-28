@@ -121,11 +121,11 @@ runs:
       shell: bash
     - name: Set Artifacts Name
       shell: bash
-      run: echo '::set-output name=ARTIFACTS_NAME=$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)'
+      run: echo '::set-env name=ARTIFACTS_NAME=$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)'
       id: set-artifacts-name
     - name: Upload artifact
       if: always()
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: ${{ steps.set-artifacts-name.outputs.ARTIFACTS_NAME }}
+        name: ${{ env.ARTIFACTS_NAME }}
         path: Reports/
