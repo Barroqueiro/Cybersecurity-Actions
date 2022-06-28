@@ -120,6 +120,7 @@ runs:
             --zs-isblocking "${{ inputs.zs-isblocking }}"
       shell: bash
     - name: Generate artifact name
+      if: always()
       id: generate-name
       run: |
         echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"
