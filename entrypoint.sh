@@ -228,6 +228,4 @@ for ST in "${scan_type[@]}"; do
     esac
 done
 
-mv Reports $(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)
-
 exit $ret
