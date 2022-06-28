@@ -120,9 +120,10 @@ runs:
             --zs-isblocking "${{ inputs.zs-isblocking }}"
       shell: bash
     - name: Generate artifact name
-        id: generate-name
-        run: |
-          echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"
+      id: generate-name
+      run: |
+        echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"
+      shell: bash
     - name: Upload artifact
       if: always()
       uses: actions/upload-artifact@v1.0.0
