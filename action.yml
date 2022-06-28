@@ -119,13 +119,13 @@ runs:
             --zap-target "${{ inputs.zap-target }}"
             --zs-isblocking "${{ inputs.zs-isblocking }}"
       shell: bash
-    - name: Set Artifacts Name
-      shell: bash
-      run: echo '::set-env name=ARTIFACTS_NAME=$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)'
-      id: set-artifacts-name
+    - name: Generate artifact name
+        id: generate-name
+        run: |
+          echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"
     - name: Upload artifact
       if: always()
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: ${{ env.ARTIFACTS_NAME }}
+        name: ${{ steps.generate-name.outputs.artifact }}
         path: Reports/
