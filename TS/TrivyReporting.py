@@ -94,7 +94,7 @@ def main():
         data = json.loads(trivy.read())
 
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    vuln_list = data["Results"]["Vulnerabilities"]
+    vuln_list = data[0]["Vulnerabilities"]
     vulns = parse_trivy_json(vuln_list)
 
     styles = config["output_styles"].split(",")

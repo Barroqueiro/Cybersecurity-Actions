@@ -47,7 +47,7 @@ then
 fi
 
 # Install trivy
-curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.29.1
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin 0.18.3
 
 # Run trivy against the image to scan
 trivy image \
