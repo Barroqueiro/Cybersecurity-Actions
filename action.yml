@@ -130,4 +130,4 @@ runs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ steps.generate-name.outputs.artifact }}
-        path: ${{ steps.generate-name.outputs.artifact }}/
+        path: Reports/
