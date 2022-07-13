@@ -228,4 +228,6 @@ for ST in "${scan_type[@]}"; do
     esac
 done
 
+cp -R Reports ..
+
 exit $ret
