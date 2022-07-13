@@ -84,7 +84,7 @@ inputs:
     description: 'Fail the workflow if the Trivy Scan finds vulnerabilities'
     default: ''
 outputs:
-  artifact:
+  artifact-name:
     description: Name of the artifact this action creates
 runs:
   using: "composite"
