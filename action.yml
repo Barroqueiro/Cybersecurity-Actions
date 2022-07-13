@@ -91,11 +91,7 @@ runs:
   using: "composite"
   steps:
     - name: Get Reporting
-      run: |
-            cd ${{ github.action_path }}
-            ls -R
-            git pull --recurse-submodules
-            cd -
+      run: ${{ github.action_path }}/entrypoint.sh ${{ github.action_path }}
       shell: bash
     - name: Entrypoint
       run: >
