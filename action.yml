@@ -91,7 +91,7 @@ runs:
   using: "composite"
   steps:
     - name: Get Reporting
-      run: ${{ github.action_path }}/entrypoint.sh ${{ github.action_path }}
+      run: ${{ github.action_path }}/sparse.sh ${{ github.action_path }}
       shell: bash
     - name: Entrypoint
       run: >
