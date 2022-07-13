@@ -28,7 +28,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-ASSETS=$(dirname -- "$0")
+ASSETS=$(dirname -- "$0")../Reporting
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -66,7 +66,7 @@ RET=$?
 
 # Sumarize reports
 mkdir -p $DIR
-python3 $ASSETS/DockleReporting.py \
+python3 $ASSETS/scripts/DockleReporting.py \
                         --json DockleReport.json \
                         --current-path $ASSETS \
                         --output $DIR/DockleReport \

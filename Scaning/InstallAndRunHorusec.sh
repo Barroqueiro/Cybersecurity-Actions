@@ -26,7 +26,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-ASSETS=$(dirname -- "$0")
+ASSETS=$(dirname -- "$0")../Reporting
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -63,7 +63,7 @@ fi
 
 # Sumarise reports
 mkdir -p $DIR
-python3 $ASSETS/HorusecReporting.py \
+python3 $ASSETS/scripts/HorusecReporting.py \
                         --json ./HorusecReport.json \
                         --current-path $ASSETS \
                         --output $DIR/HorusecReport \
