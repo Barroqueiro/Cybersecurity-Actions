@@ -127,6 +127,7 @@ runs:
       id: generate-name
       run: |
         echo "::set-output name=artifact::$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)"
+        echo "::set-output name=artifact-name::$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse --short HEAD)"
       shell: bash
     - name: Upload artifact
       if: always()
