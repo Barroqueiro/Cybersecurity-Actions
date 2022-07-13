@@ -85,7 +85,7 @@ inputs:
     default: ''
 outputs:
   artifact:
-    descrption: Name of the artifact this action creates
+    description: Name of the artifact this action creates
 runs:
   using: "composite"
   steps:
