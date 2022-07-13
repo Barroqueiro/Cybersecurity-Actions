@@ -86,7 +86,7 @@ inputs:
 outputs:
   artifact-name:
     description: Name of the artifact this action creates
-    value: {{ steps.generate-name.outputs.artifact }}
+    value: ${{ steps.generate-name.outputs.artifact }}
 runs:
   using: "composite"
   steps:
