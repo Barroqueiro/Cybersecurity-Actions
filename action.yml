@@ -83,6 +83,9 @@ inputs:
   zs-isblocking:
     description: 'Fail the workflow if the Trivy Scan finds vulnerabilities'
     default: ''
+outputs:
+  artifact:
+    descrption: Name of the artifact this action creates
 runs:
   using: "composite"
   steps:
