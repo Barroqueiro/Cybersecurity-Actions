@@ -30,7 +30,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-ASSETS=$(dirname -- "$0")
+ASSETS=$(dirname -- "$0")/../Reporting
 
 # Install both tools and jinja
 python3 -m pip install radon
@@ -82,7 +82,7 @@ for file in $FILES_TOSCAN; do
                     -0 "$before"
         fi
         radon cc $CMD_RD "$before" > "$radon_file"
-        python3 $ASSETS/BadPracticesReporting.py \
+        python3 $ASSETS/scripts/BadPracticesReporting.py \
                     --json "$prosp_file" \
                     --txt "$radon_file" \
                     --current-path "$ASSETS" \

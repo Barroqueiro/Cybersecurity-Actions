@@ -28,7 +28,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-ASSETS=$(dirname -- "$0")
+ASSETS=$(dirname -- "$0")/../Reporting
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -60,7 +60,7 @@ RET=$?
 
 # Sumarize the reports
 mkdir -p $DIR
-python3 $ASSETS/TrivyReporting.py \
+python3 $ASSETS/scripts/TrivyReporting.py \
                 --json TrivyReport.json \
                 --current-path $ASSETS \
                 --output $DIR/TrivyReport \

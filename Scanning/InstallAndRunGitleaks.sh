@@ -28,7 +28,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
 
-ASSETS=$(dirname -- "$0")
+ASSETS=$(dirname -- "$0")/../Reporting
 
 # To help debugging
 if [ $DEBUG = "true" ]
@@ -62,7 +62,7 @@ cd ../$REPO
 # Run Gitleaks
 if [ $CONFIG != "" ] 
 then
-    python3 $ASSETS/SecretsReporting.py \
+    python3 $ASSETS/scripts/SecretsReporting.py \
                             --json output.json \
                             --ignore $CONFIG \
                             --current-path $ASSETS \
@@ -71,7 +71,7 @@ then
     RET=$?
 else
     touch .ignoresecrets
-    python3 $ASSETS/SecretsReporting.py \
+    python3 $ASSETS/scripts/SecretsReporting.py \
                             --json output.json \
                             --ignore .ignoresecrets \
                             --current-path $ASSETS \
