@@ -93,6 +93,7 @@ runs:
     - name: Get Reporting
       run: |
             cd ${{ github.action_path }}
+            ls -R
             git pull --recurse-submodules
             cd -
       shell: bash
