@@ -1,0 +1,3 @@
+[submodule "Reporting"]
+	path = Reporting
+	url = https://github.com/Barroqueiro/Reporting
