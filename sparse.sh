@@ -1,8 +1,8 @@
 cd $1
 
-rm Reporting
+rm -rf Reporting
 
-git clone git@github.com:Barroqueiro/Cybersecurity-Actions.git --recurse-submodules
+git clone https://github.com/Barroqueiro/Cybersecurity-Actions.git --recurse-submodules
 
 cd Cybersecurity-Actions
 
