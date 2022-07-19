@@ -38,10 +38,6 @@ then
     mkdir -p $DEBUG_DIR
 fi
 
-export DOCKLE_HOST="unix:///var/run/docker.sock"
-BEFORE_XDG=$XDG_RUNTIME_DIR
-export XDG_RUNTIME_DIR=""
-
 # Directory configuration
 DIR="Reports/DockleScan"
 
@@ -81,7 +77,5 @@ if [ $DEBUG = "true" ]
 then
     mv DockleReport.json $DEBUG_DIR
 fi
-
-export XDG_RUNTIME_DIR=$BEFORE_XDG
 
 exit $RET

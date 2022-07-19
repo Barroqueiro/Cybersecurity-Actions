@@ -94,6 +94,8 @@ runs:
       run: ${{ github.action_path }}/sparse.sh ${{ github.action_path }}
       shell: bash
     - name: Entrypoint
+      env:
+        DOCKLE_HOST: "unix:///var/run/docker.sock"
       run: >
             ${{ github.action_path }}/entrypoint.sh 
             --debug "${{ inputs.debug }}"
