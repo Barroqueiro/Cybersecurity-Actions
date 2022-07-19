@@ -55,6 +55,8 @@ VERSION=$(
 ) && curl -L -o dockle.deb https://github.com/goodwithtech/dockle/releases/download/v${VERSION}/dockle_${VERSION}_Linux-64bit.deb
 sudo dpkg -i dockle.deb && rm dockle.deb
 
+docker image ls
+
 # Run dockle against the image
 dockle \
     --exit-code 1 \
