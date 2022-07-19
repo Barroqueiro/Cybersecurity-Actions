@@ -1,4 +1,4 @@
-cd $1
+cd $(dirname -- "$0")
 
 rm -rf Reporting
 
