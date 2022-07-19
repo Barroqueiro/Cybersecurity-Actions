@@ -27,7 +27,6 @@ while [[ "$#" > 0 ]]; do case $1 in
   --output-styles) OUTPUT_STYLES="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
-export DOCKLE_HOST="unix:///var/run/docker.sock"
 
 ASSETS=$(dirname -- "$0")/../Reporting
 
@@ -38,6 +37,8 @@ then
     DEBUG_DIR="Reports/Debug/DockleScan"
     mkdir -p $DEBUG_DIR
 fi
+
+export DOCKLE_HOST="unix:///var/run/docker.sock"
 
 # Directory configuration
 DIR="Reports/DockleScan"
