@@ -27,6 +27,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   --output-styles) OUTPUT_STYLES="$2"; shift;shift;;
   *) usage "Unknown parameter passed: $1"; shift; shift;;
 esac; done
+export DOCKLE_HOST="unix:///var/run/docker.sock"
 
 ASSETS=$(dirname -- "$0")/../Reporting
 
@@ -58,7 +59,7 @@ sudo dpkg -i dockle.deb && rm dockle.deb
 docker image ls
 
 # Run dockle against the image
-dockle \
+sudo dockle \
     --exit-code 1 \
     $CMD \
     -f json \
