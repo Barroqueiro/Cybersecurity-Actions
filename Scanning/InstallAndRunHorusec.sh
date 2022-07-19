@@ -45,7 +45,7 @@ curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/main/deployments/scri
 # Run horusec
 if [ $CONFIG != "" ] 
 then
-    horusec start \
+    sudo horusec start \
                 -p="./" \
                 -e="true" \
                 -o="json" \
@@ -53,7 +53,7 @@ then
                 --config-file-path $CONFIG $CMD
     RET=$?
 else
-    horusec start \
+    sudo horusec start \
                 -p="./" \
                 -e="true" \
                 -o="json" \
