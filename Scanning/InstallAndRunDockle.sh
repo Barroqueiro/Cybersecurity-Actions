@@ -58,7 +58,8 @@ sudo dpkg -i dockle.deb && rm dockle.deb
 docker image ls
 
 # Run dockle against the image
-sudo dockle \
+export DOCKLE_HOST="unix:///var/run/docker.sock"
+dockle \
     --exit-code 1 \
     $CMD \
     -f json \
