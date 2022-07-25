@@ -60,7 +60,7 @@ then
 else
     docker run \
             --user root \
-            -v $(pwd):/$volume/:rw \
+            -v $(pwd):/$VOLUME/:rw \
             --network="host" \
             -t owasp/zap2docker-stable zap-full-scan.py \
             -t $TARGET \
