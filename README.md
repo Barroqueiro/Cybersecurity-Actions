@@ -123,7 +123,8 @@ Notes concerning Docker Related parameters:
 
 Use the scripts build.sh and run.sh in the ActionFiles folder of the repository to build and run the image. The image is tagged with: scan/scanimage:latest
 The image does not need to be ran during the custom action, it can be build in previous steps fully configurable within the workflow file. Just make sure there is an image to be scanned (DS,TS) or there is an instance to be analysed (ZS). 
-Since the build and run scripts are threated as setup options these will run before any scanning starts, having these scripts configured for scans that don't need them will create unecessary overhead.
+Since the build and run scripts are threated as setup options these will run before any scanning starts, having these scripts configured for scans that don't need them will create unecessary overhead. 
+The build and run parameters are legacy parameters, the better option is probably to run the image outside this actions to have better control over the process.
 
 ### Bad Practices Related parameters
 
@@ -344,7 +345,7 @@ These are true by default but if anything different than the string 'true' is pa
     Required: False
     Default: 'false'
 
-If debug is set to `true`, debug files (jsons directly from each tool) will be included within the artifacts
+If debug is set to `true`, debug files (jsons directly from each tool) will be included within the artifacts and a more verbose output will be found within the action's logs.
 
 ### Output styles
 
@@ -353,6 +354,11 @@ If debug is set to `true`, debug files (jsons directly from each tool) will be i
     Default: 'HTML'
 
 Output styles from the report created, 2 options are available `HTML` and `MD`, either one can be chosen or they can be combined using commas.
+
+## Outputs
+
+    Name: artifact-name
+    description: Name of the artifact this action creates
 
 
 ### Anotations that can be found
@@ -391,10 +397,12 @@ Always a structure like the one bellow
     │   └── TrivyReport.md
     ├── VulnerabilityScan
     │   ├── HorusecReport.html
-    │   └── HorusecReport.md
+    │   ├── HorusecReport.md
+    |   └── HorusecReportAppendix.md
     ├── ZapScan
     │   ├── ZapReport.html
-    │   └── ZapReport.md
+    │   ├── ZapReport.md
+    |   └── ZapReportAppendix.md
     └── Debug
         ├── BadPracticesScan
         │   └── Directories of the original repository with json and txt files
@@ -411,7 +419,7 @@ Always a structure like the one bellow
 
 ### Ignoring vulnerabilities
 
-#### **Bap practices**
+#### **Bad practices**
 
 Radon only serves as quality of life information for methods and their complexity so there is no ignoring feature for radon
 
@@ -446,19 +454,5 @@ Note: The file does need to be called .trivyignore
 
 Zap works the other way arround, it will not fail by deafult when finding issues, if we wish to fail on certain problems this must be sepecified within the rules.tsv file (Yes it needs to be .tsv), this file was already referenced above
 
-### Choices Made
-
-Each folder for a type of scan has a README.md inside specifying the choices made and how it works in a more detailed way (Dockle and Trivy scans were initially conceptualized as 1, container scanning, so their file is shared and stored withing the TS folder)
-
-### Jumps
-
-[Bad practices Documentation](BP/README.md)
-
-[Vulnerabilities Scan Documentation](VS/README.md)
-
-[Secrets Scan Documentation](SS/README.md)
-
-[Container Scan Documentation](TS/README.md)
-
-[Zap Scan Documentation](ZS/README.md)
+### [More documentation](https://github.com/Barroqueiro/Cybersecurity-Actions/tree/main/Docs)
 
